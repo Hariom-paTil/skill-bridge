@@ -7,20 +7,21 @@ import { CareerGuidanceComponent } from './components/career-guidance/career-gui
 import { StudyRecommendComponent } from './components/study-recommend/study-recommend.component';
 import { InternshipFinderComponent } from './components/internship-finder/internship-finder.component';
 import { CodeFixerComponent } from './components/code-fixer/code-fixer.component';
+import { ProjectIdeasComponent } from './components/project-ideas/project-ideas.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, HeroSectionComponent, FeaturesSectionComponent, CareerGuidanceComponent, StudyRecommendComponent, InternshipFinderComponent, CodeFixerComponent],
+  imports: [CommonModule, HeaderComponent, HeroSectionComponent, FeaturesSectionComponent, CareerGuidanceComponent, StudyRecommendComponent, InternshipFinderComponent, CodeFixerComponent, ProjectIdeasComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
   title = 'skill-bridge';
 
-  activeTool: 'career-guidance' | 'study-recommend' | 'internship-finder' | 'code-fixer' | null = null;
+  activeTool: 'career-guidance' | 'study-recommend' | 'internship-finder' | 'code-fixer' | 'project-ideas' | null = null;
 
-  openTool(tool: 'career-guidance' | 'study-recommend' | 'internship-finder' | 'code-fixer'): void {
+  openTool(tool: 'career-guidance' | 'study-recommend' | 'internship-finder' | 'code-fixer' | 'project-ideas'): void {
     this.activeTool = tool;
   }
 

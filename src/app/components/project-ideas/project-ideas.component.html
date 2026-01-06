@@ -1,0 +1,66 @@
+<section class="tool-panel">
+  <header class="tool-header">
+    <div>
+      <p class="eyebrow">Innovation</p>
+      <h2>Project Ideas Generator</h2>
+      <p class="lede">Get personalized project ideas based on your skill level and interests.</p>
+    </div>
+    <div class="header-icon">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </header>
+
+  <div class="input-grid">
+    <label class="field">
+      <span class="field-label">Domain</span>
+      <select name="domain" [(ngModel)]="filters.domain">
+        <option value="web">Web Development</option>
+        <option value="mobile">Mobile Apps</option>
+        <option value="data">Data Science</option>
+        <option value="ai">AI/ML</option>
+      </select>
+    </label>
+
+    <label class="field">
+      <span class="field-label">Skill Level</span>
+      <select name="level" [(ngModel)]="filters.level">
+        <option value="beginner">Beginner</option>
+        <option value="intermediate">Intermediate</option>
+        <option value="advanced">Advanced</option>
+      </select>
+    </label>
+
+    <button type="button" class="primary" (click)="generate()">Generate ideas</button>
+  </div>
+
+  <p class="status">{{ statusText }}</p>
+
+  <div class="results" *ngIf="ideas.length">
+    <article class="result-card" *ngFor="let idea of ideas">
+      <header class="card-header">
+        <div>
+          <span class="difficulty-badge" [ngClass]="idea.difficulty">{{ idea.difficulty }}</span>
+          <h3>{{ idea.title }}</h3>
+        </div>
+        <span class="time-badge">{{ idea.timeEstimate }}</span>
+      </header>
+
+      <p class="description">{{ idea.description }}</p>
+
+      <div class="pill-row">
+        <span class="pill" *ngFor="let skill of idea.skills">{{ skill }}</span>
+      </div>
+
+      <div class="features-section">
+        <p class="subhead">Key Features</p>
+        <ul>
+          <li *ngFor="let feature of idea.features">{{ feature }}</li>
+        </ul>
+      </div>
+    </article>
+  </div>
+</section>
