@@ -2,6 +2,18 @@
 
 <app-hero-section></app-hero-section>
 
-<app-features-section></app-features-section>
+<app-features-section (toolSelected)="openTool($event)"></app-features-section>
 
-<router-outlet />
+<div class="modal" *ngIf="activeTool">
+	<div class="modal-backdrop" (click)="closeTool()"></div>
+	<div class="modal-content">
+		<button type="button" class="close" aria-label="Close" (click)="closeTool()">×</button>
+
+		<ng-container [ngSwitch]="activeTool">
+			<app-career-guidance *ngSwitchCase="'career-guidance'"></app-career-guidance>
+			<app-study-recommend *ngSwitchCase="'study-recommend'"></app-study-recommend>
+			<app-internship-finder *ngSwitchCase="'internship-finder'"></app-internship-finder>
+			<app-code-fixer *ngSwitchCase="'code-fixer'"></app-code-fixer>
+		</ng-container>
+	</div>
+</div>
