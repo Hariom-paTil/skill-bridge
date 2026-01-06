@@ -1,1 +1,64 @@
-<p>internship-finder works!</p>
+<section class="tool-panel">
+	<header class="tool-header">
+		<div>
+			<p class="eyebrow">Opportunities</p>
+			<h2>Internship Finder</h2>
+			<p class="lede">Search internships by role, location, and work mode with quick filters.</p>
+		</div>
+	</header>
+
+	<div class="input-grid">
+		<label class="field">
+			<span class="field-label">Keyword or skill</span>
+			<input
+				name="keyword"
+				[(ngModel)]="filters.keyword"
+				placeholder="e.g. angular, data, backend"
+			/>
+		</label>
+
+		<label class="field">
+			<span class="field-label">Location</span>
+			<input
+				name="location"
+				[(ngModel)]="filters.location"
+				placeholder="City or remote"
+			/>
+		</label>
+
+		<label class="field">
+			<span class="field-label">Mode</span>
+			<select name="type" [(ngModel)]="filters.type">
+				<option value="any">Any</option>
+				<option value="remote">Remote</option>
+				<option value="onsite">Onsite</option>
+				<option value="hybrid">Hybrid</option>
+			</select>
+		</label>
+
+		<button type="button" class="primary" (click)="find()">Find matches</button>
+	</div>
+
+	<p class="status">{{ resultNote }}</p>
+
+	<div class="results" *ngIf="matches.length">
+		<article class="result-card" *ngFor="let internship of matches">
+			<div class="card-top">
+				<div>
+					<p class="eyebrow">{{ internship.type }}</p>
+					<h3>{{ internship.title }}</h3>
+				</div>
+				<p class="company">{{ internship.company }}</p>
+			</div>
+
+			<div class="pill-row">
+				<span class="pill" *ngFor="let tag of internship.focus">{{ tag }}</span>
+			</div>
+
+			<div class="meta">
+				<span>{{ internship.location }}</span>
+				<span>{{ internship.stipend }}</span>
+			</div>
+		</article>
+	</div>
+</section>

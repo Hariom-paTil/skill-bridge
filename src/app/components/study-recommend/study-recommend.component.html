@@ -1,1 +1,64 @@
-<p>study-recommend works!</p>
+<section class="tool-panel">
+	<header class="tool-header">
+		<div>
+			<p class="eyebrow">Learning plan</p>
+			<h2>Study Recommendations</h2>
+			<p class="lede">Choose a focus and level to get curated study tracks with resources.</p>
+		</div>
+	</header>
+
+	<div class="input-grid">
+		<label class="field">
+			<span class="field-label">Focus area</span>
+			<input
+				name="query"
+				[(ngModel)]="query"
+				placeholder="e.g. frontend, backend, data, ml"
+			/>
+		</label>
+
+		<label class="field">
+			<span class="field-label">Level</span>
+			<select name="level" [(ngModel)]="level">
+				<option value="beginner">Beginner</option>
+				<option value="intermediate">Intermediate</option>
+				<option value="advanced">Advanced</option>
+			</select>
+		</label>
+
+		<button type="button" class="primary" (click)="recommend()">Get recommendations</button>
+	</div>
+
+	<p class="status">{{ note }}</p>
+
+	<div class="results" *ngIf="recommendations.length">
+		<article class="result-card" *ngFor="let path of recommendations">
+			<header class="result-header">
+				<div>
+					<p class="eyebrow">Track</p>
+					<h3>{{ path.name }}</h3>
+				</div>
+				<p class="summary">Duration: {{ path.duration }}</p>
+			</header>
+
+			<div class="pill-row">
+				<span class="pill" *ngFor="let focus of path.focus">{{ focus }}</span>
+			</div>
+
+			<div class="columns">
+				<div>
+					<p class="subhead">Skills to build</p>
+					<ul>
+						<li *ngFor="let skill of path.skills">{{ skill }}</li>
+					</ul>
+				</div>
+				<div>
+					<p class="subhead">Suggested resources</p>
+					<ul>
+						<li *ngFor="let resource of path.resources">{{ resource }}</li>
+					</ul>
+				</div>
+			</div>
+		</article>
+	</div>
+</section>

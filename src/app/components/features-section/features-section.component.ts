@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-features-section',
   standalone: true,
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './features-section.component.html',
   styleUrl: './features-section.component.scss'
 })

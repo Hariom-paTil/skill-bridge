@@ -1,1 +1,81 @@
-<p>career-guidance works!</p>
+<section class="tool-panel">
+	<header class="tool-header">
+		<div>
+			<p class="eyebrow">Path planner</p>
+			<h2>Career Guidance</h2>
+			<p class="lede">Describe what you enjoy and we will surface career tracks plus concrete next steps.</p>
+		</div>
+	</header>
+
+	<form class="input-grid" (ngSubmit)="generateGuidance()">
+		<label class="field">
+			<span class="field-label">Interests</span>
+			<textarea
+				name="interests"
+				[(ngModel)]="profile.interests"
+				rows="3"
+				placeholder="e.g. APIs, cloud, solving performance issues"
+			></textarea>
+		</label>
+
+		<label class="field">
+			<span class="field-label">Strengths</span>
+			<textarea
+				name="strengths"
+				[(ngModel)]="profile.strengths"
+				rows="3"
+				placeholder="e.g. debugging, SQL, UI polish"
+			></textarea>
+		</label>
+
+		<label class="field">
+			<span class="field-label">Goal</span>
+			<select name="goal" [(ngModel)]="profile.goal">
+				<option value="break-into-tech">Break into tech</option>
+				<option value="pivot">Pivot from another domain</option>
+				<option value="level-up">Level up in current role</option>
+			</select>
+		</label>
+
+		<button type="submit" class="primary">Generate guidance</button>
+	</form>
+
+	<p class="status">{{ statusText }}</p>
+
+	<div class="results" *ngIf="recommendations.length">
+		<article class="result-card" *ngFor="let track of recommendations">
+			<header class="result-header">
+				<div>
+					<p class="eyebrow">Track</p>
+					<h3>{{ track.title }}</h3>
+				</div>
+				<p class="summary">{{ track.summary }}</p>
+			</header>
+
+			<div class="pill-row">
+				<span class="pill" *ngFor="let fit of track.bestFor">{{ fit }}</span>
+			</div>
+
+			<div class="columns">
+				<div>
+					<p class="subhead">Core skills</p>
+					<ul>
+						<li *ngFor="let skill of track.skills">{{ skill }}</li>
+					</ul>
+				</div>
+				<div>
+					<p class="subhead">First steps</p>
+					<ul>
+						<li *ngFor="let step of track.firstSteps">{{ step }}</li>
+					</ul>
+				</div>
+				<div>
+					<p class="subhead">Sample roles</p>
+					<ul>
+						<li *ngFor="let role of track.sampleRoles">{{ role }}</li>
+					</ul>
+				</div>
+			</div>
+		</article>
+	</div>
+</section>

@@ -1,1 +1,52 @@
-<p>code-fixer works!</p>
+<section class="tool-panel">
+	<header class="tool-header">
+		<div>
+			<p class="eyebrow">Debug helper</p>
+			<h2>Code Error Fixer</h2>
+			<p class="lede">Paste a snippet or stack trace and get quick checks before you debug deeper.</p>
+		</div>
+	</header>
+
+	<div class="input-grid">
+		<label class="field">
+			<span class="field-label">Language</span>
+			<select name="language" [(ngModel)]="language">
+				<option value="typescript">TypeScript / JavaScript</option>
+				<option value="python">Python</option>
+				<option value="java">Java</option>
+				<option value="other">Other</option>
+			</select>
+		</label>
+
+		<label class="field">
+			<span class="field-label">Context</span>
+			<input
+				name="context"
+				[(ngModel)]="context"
+				placeholder="e.g. fails in production, happens on form submit"
+			/>
+		</label>
+	</div>
+
+	<label class="field">
+		<span class="field-label">Code or stack trace</span>
+		<textarea
+			name="snippet"
+			[(ngModel)]="snippet"
+			rows="8"
+			placeholder="Paste code here..."
+		></textarea>
+	</label>
+
+	<button type="button" class="primary" (click)="analyze()">Find issues</button>
+
+	<p class="status">{{ suggestion }}</p>
+
+	<div class="results" *ngIf="findings.length">
+		<article class="result-card" *ngFor="let finding of findings">
+			<div class="badge" [ngClass]="finding.severity">{{ finding.severity }}</div>
+			<p class="subhead">{{ finding.issue }}</p>
+			<p class="summary">{{ finding.fix }}</p>
+		</article>
+	</div>
+</section>

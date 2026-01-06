@@ -91,6 +91,27 @@
       margin: 0;
       font-weight: 400;
     }
+
+    .feature-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 18px;
+      padding: 10px 16px;
+      background: linear-gradient(90deg, #2563d4, #1e4fb8);
+      color: #ffffff;
+      font-weight: 600;
+      border-radius: 10px;
+      text-decoration: none;
+      box-shadow: 0 6px 16px rgba(37, 99, 212, 0.25);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(37, 99, 212, 0.35);
+      }
+    }
   }
 }
 
