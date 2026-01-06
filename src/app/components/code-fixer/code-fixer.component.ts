@@ -21,6 +21,7 @@ export class CodeFixerComponent {
   context = '';
   findings: Finding[] = [];
   suggestion = 'Paste a snippet or stack trace to get quick checks.';
+  imageSrc = 'assets/code.png';
 
   analyze(): void {
     const trimmed = this.snippet.trim();

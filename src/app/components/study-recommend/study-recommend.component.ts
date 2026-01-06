@@ -21,6 +21,8 @@ export class StudyRecommendComponent {
   query = '';
   level = 'beginner';
 
+  imageSrc = 'assets/study_r.png';
+
   paths: StudyPath[] = [
     {
       name: 'Web Fundamentals',

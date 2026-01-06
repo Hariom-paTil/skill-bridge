@@ -25,6 +25,8 @@ export class CareerGuidanceComponent {
     goal: 'break-into-tech'
   };
 
+  imageSrc = 'assets/careerlogo.png';
+
   tracks: CareerTrack[] = [
     {
       title: 'Backend Engineering',

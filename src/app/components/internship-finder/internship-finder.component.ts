@@ -25,6 +25,8 @@ export class InternshipFinderComponent {
     type: 'any'
   };
 
+  imageSrc = 'assets/internship.png';
+
   internships: Internship[] = [
     {
       title: 'Backend Intern',
