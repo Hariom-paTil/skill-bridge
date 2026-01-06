@@ -1,0 +1,138 @@
+.header {
+  background: linear-gradient(135deg, #0d2d5e 0%, #1a4380 100%);
+  padding: 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 40px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 5px 15px 5px 5px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+    .logo-img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      background-color: #ffffff;
+      border-radius: 6px;
+      padding: 3px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: crisp-edges;
+    }
+
+    .logo-text {
+      font-size: 24px;
+      font-weight: 700;
+      color: #0d2d5e;
+      letter-spacing: 0.5px;
+      text-shadow: none;
+    }
+  }
+
+  .nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 35px;
+    flex: 1;
+    justify-content: center;
+
+    .nav-link {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 8px 0;
+      position: relative;
+
+      &:hover {
+        color: #ffa500;
+      }
+
+      &.active {
+        color: #ffffff;
+        
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 2px;
+          background-color: #ffffff;
+        }
+      }
+    }
+  }
+
+  .about-btn {
+    background-color: #2563d4;
+    color: #ffffff;
+    border: none;
+    padding: 10px 30px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+
+    &:hover {
+      background-color: #1e4fb8;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 1024px) {
+  .header {
+    .container {
+      padding: 15px 20px;
+    }
+
+    .nav-menu {
+      gap: 20px;
+
+      .nav-link {
+        font-size: 14px;
+      }
+    }
+
+    .about-btn {
+      padding: 8px 20px;
+      font-size: 14px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    .nav-menu {
+      display: none;
+    }
+  }
+}
