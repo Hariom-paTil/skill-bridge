@@ -8,11 +8,12 @@ import { StudyRecommendComponent } from './components/study-recommend/study-reco
 import { InternshipFinderComponent } from './components/internship-finder/internship-finder.component';
 import { CodeFixerComponent } from './components/code-fixer/code-fixer.component';
 import { ProjectIdeasComponent } from './components/project-ideas/project-ideas.component';
+import { AuthModalComponent } from './components/auth/auth-modal/auth-modal.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, HeroSectionComponent, FeaturesSectionComponent, CareerGuidanceComponent, StudyRecommendComponent, InternshipFinderComponent, CodeFixerComponent, ProjectIdeasComponent],
+  imports: [CommonModule, HeaderComponent, HeroSectionComponent, FeaturesSectionComponent, CareerGuidanceComponent, StudyRecommendComponent, InternshipFinderComponent, CodeFixerComponent, ProjectIdeasComponent, AuthModalComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

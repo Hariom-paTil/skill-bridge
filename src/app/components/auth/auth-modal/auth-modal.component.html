@@ -1,0 +1,7 @@
+<div class="modal-overlay" *ngIf="modal.isOpen()" (click)="modal.close()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="modal.close()">×</button>
+    <app-login *ngIf="modal.view() === 'login'"></app-login>
+    <app-signup *ngIf="modal.view() === 'signup'"></app-signup>
+  </div>
+</div>

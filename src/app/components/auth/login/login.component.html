@@ -1,0 +1,17 @@
+<div class="auth-form">
+  <h2>Login</h2>
+  <form (ngSubmit)="onSubmit()">
+    <div class="form-field">
+      <label>Email</label>
+      <input type="email" [(ngModel)]="email" name="email" required placeholder="Enter your email">
+    </div>
+    <div class="form-field">
+      <label>Password</label>
+      <input type="password" [(ngModel)]="password" name="password" required placeholder="Enter your password">
+    </div>
+    <button type="submit" class="btn-primary">Login</button>
+  </form>
+  <p class="switch-link">
+    Don't have an account? <a (click)="switchToSignup()">Sign up</a>
+  </p>
+</div>
