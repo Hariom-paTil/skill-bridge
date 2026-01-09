@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthModalService } from '../../../services/auth-modal.service';
 import { AuthService } from '../../../services/auth.service';
+import { AuthStateService } from '../../../services/auth-state.service';
 
 @Component({
   selector: 'app-login',
@@ -14,6 +15,7 @@ import { AuthService } from '../../../services/auth.service';
 export class LoginComponent {
   modal = inject(AuthModalService);
   authService = inject(AuthService);
+  authState = inject(AuthStateService);
   
   email = '';
   password = '';
@@ -31,6 +33,11 @@ export class LoginComponent {
         this.loading = false;
         this.successMessage = 'Login successful!';
         console.log('Login success:', response);
+        
+        // Extract user name from email (before @)
+        const userName = this.email.split('@')[0];
+        this.authState.login(userName);
+        
         // Store token if needed: localStorage.setItem('token', response.token);
         // Close modal after 1 second
         setTimeout(() => this.modal.close(), 1000);

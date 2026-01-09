@@ -9,11 +9,12 @@ import { InternshipFinderComponent } from './components/internship-finder/intern
 import { CodeFixerComponent } from './components/code-fixer/code-fixer.component';
 import { ProjectIdeasComponent } from './components/project-ideas/project-ideas.component';
 import { AuthModalComponent } from './components/auth/auth-modal/auth-modal.component';
+import { CelebrationComponent } from './components/shared/celebration/celebration.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, HeroSectionComponent, FeaturesSectionComponent, CareerGuidanceComponent, StudyRecommendComponent, InternshipFinderComponent, CodeFixerComponent, ProjectIdeasComponent, AuthModalComponent],
+  imports: [CommonModule, HeaderComponent, HeroSectionComponent, FeaturesSectionComponent, CareerGuidanceComponent, StudyRecommendComponent, InternshipFinderComponent, CodeFixerComponent, ProjectIdeasComponent, AuthModalComponent, CelebrationComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

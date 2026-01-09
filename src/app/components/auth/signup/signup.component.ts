@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthModalService } from '../../../services/auth-modal.service';
 import { AuthService } from '../../../services/auth.service';
+import { CelebrationService } from '../../../services/celebration.service';
+import { AuthStateService } from '../../../services/auth-state.service';
 
 @Component({
   selector: 'app-signup',
@@ -14,6 +16,8 @@ import { AuthService } from '../../../services/auth.service';
 export class SignupComponent {
   modal = inject(AuthModalService);
   authService = inject(AuthService);
+  celebration = inject(CelebrationService);
+  authState = inject(AuthStateService);
   
   firstName = '';
   lastName = '';
@@ -47,15 +51,69 @@ export class SignupComponent {
     this.authService.register(payload).subscribe({
       next: (response) => {
         this.loading = false;
+        console.log('Signup success - Full response:', response);
+        console.log('Response status: SUCCESS (200)');
+        
         this.successMessage = 'Registration successful!';
-        console.log('Signup success:', response);
-        // Auto switch to login after 1.5 seconds
-        setTimeout(() => this.modal.showLogin(), 1500);
+        
+        // Set logged in state
+        this.authState.login(this.firstName);
+        
+        // Close modal first
+        this.modal.close();
+        
+        // Show celebration effect
+        setTimeout(() => {
+          this.celebration.celebrate(this.firstName);
+        }, 300);
       },
       error: (error) => {
         this.loading = false;
-        this.errorMessage = error.error?.message || 'Registration failed. Please try again.';
-        console.error('Signup error:', error);
+        console.error('Full signup error:', error);
+        console.error('Error status:', error.status);
+        console.error('Error message:', error.message);
+        console.error('Error body:', error.error);
+        
+        // If status is 200, it's actually a success (some APIs return errors incorrectly)
+        if (error.status === 200 || error.status === 201) {
+          console.log('Status 200/201 detected - treating as success');
+          this.successMessage = 'Registration successful!';
+          this.authState.login(this.firstName);
+          this.modal.close();
+          setTimeout(() => {
+            this.celebration.celebrate(this.firstName);
+          }, 300);
+          return;
+        }
+        
+        // Check if email already exists
+        const errorMsg = error.error?.message || error.error?.title || '';
+        const emailExists = errorMsg.toLowerCase().includes('email') && 
+                           (errorMsg.toLowerCase().includes('already') || 
+                            errorMsg.toLowerCase().includes('exist') ||
+                            errorMsg.toLowerCase().includes('present'));
+        
+        // Better error messages
+        if (error.status === 0) {
+          this.errorMessage = 'Cannot connect to server. Please check if the API is running.';
+        } else if (error.status === 400 && emailExists) {
+          this.errorMessage = 'Email already registered. Redirecting to login...';
+          setTimeout(() => this.modal.showLogin(), 2000);
+        } else if (error.status === 400) {
+          this.errorMessage = error.error?.message || error.error?.title || 'Invalid data. Please check all fields.';
+        } else if (error.status === 409) {
+          this.errorMessage = 'Email already registered. Redirecting to login...';
+          setTimeout(() => this.modal.showLogin(), 2000);
+        } else if (emailExists) {
+          this.errorMessage = 'Email already registered. Redirecting to login...';
+          setTimeout(() => this.modal.showLogin(), 2000);
+        } else if (error.error?.message) {
+          this.errorMessage = error.error.message;
+        } else if (error.error?.title) {
+          this.errorMessage = error.error.title;
+        } else {
+          this.errorMessage = `Registration failed (${error.status}). Please try again.`;
+        }
       }
     });
   }

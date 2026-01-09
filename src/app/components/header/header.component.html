@@ -15,6 +15,10 @@
       <a href="#" class="nav-link">Resources</a>
     </nav>
     
-    <button class="about-btn" (click)="openLogin()">Login</button>
+    <button class="about-btn" 
+            [class.logged-in]="authState.isLoggedIn()" 
+            (click)="authState.isLoggedIn() ? logout() : openLogin()">
+      {{ authState.isLoggedIn() ? 'Logout' : 'Login' }}
+    </button>
   </div>
 </header>
