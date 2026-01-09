@@ -18,18 +18,22 @@
     <div class="form-field">
       <label>Course</label>
       <select [(ngModel)]="education" name="education">
-        <option value="imca">IMCA (ID: 101)</option>
-        <option value="bca">BCA (ID: 101)</option>
-        <option value="bba">BBA (ID: 102)</option>
-        <option value="bms">BMS (ID: 103)</option>
+        <option value="imca">IMCA</option>
+        <option value="bca">BCA</option>
+        <option value="bba">BBA</option>
+        <option value="bms">BMS</option>
       </select>
     </div>
     <div class="form-field">
       <label>Password</label>
       <input type="password" [(ngModel)]="password" name="password" required placeholder="Create a password">
     </div>
-    <button type="submit" class="btn-primary">Sign Up</button>
+    <button type="submit" class="btn-primary" [disabled]="loading">
+      {{ loading ? 'Signing up...' : 'Sign Up' }}
+    </button>
   </form>
+  <div class="message error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+  <div class="message success-message" *ngIf="successMessage">{{ successMessage }}</div>
   <p class="switch-link">
     Already have an account? <a (click)="switchToLogin()">Login</a>
   </p>
