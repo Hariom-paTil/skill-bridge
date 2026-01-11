@@ -34,9 +34,13 @@ export class LoginComponent {
         this.successMessage = 'Login successful!';
         console.log('Login success:', response);
         
-        // Extract user name from email (before @)
-        const userName = this.email.split('@')[0];
-        this.authState.login(userName);
+        // Extract user name from response or email
+        const firstName = response.firstName || this.email.split('@')[0];
+        const lastName = response.lastName || '';
+        const email = this.email;
+        const course = response.course || response.education || '';
+        
+        this.authState.login(firstName, lastName, email, course);
         
         // Store token if needed: localStorage.setItem('token', response.token);
         // Close modal after 1 second

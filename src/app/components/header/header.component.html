@@ -15,10 +15,49 @@
       <a href="#" class="nav-link">Resources</a>
     </nav>
     
-    <button class="about-btn" 
-            [class.logged-in]="authState.isLoggedIn()" 
-            (click)="authState.isLoggedIn() ? logout() : openLogin()">
-      {{ authState.isLoggedIn() ? 'Logout' : 'Login' }}
-    </button>
+    @if (authState.isLoggedIn()) {
+      <div class="profile-container">
+        <div class="profile-circle" (click)="toggleProfileDropdown()">
+          {{ getInitials() }}
+        </div>
+        
+        @if (showProfileDropdown) {
+          <div class="profile-dropdown">
+            <div class="profile-header">
+              <div class="profile-avatar">{{ getInitials() }}</div>
+              <div class="profile-info">
+                <h3>{{ authState.userDetails()?.firstName }} {{ authState.userDetails()?.lastName }}</h3>
+                <p class="profile-email">{{ authState.userDetails()?.email }}</p>
+              </div>
+            </div>
+            
+            <div class="profile-details">
+              <div class="detail-row">
+                <span class="detail-label">First Name:</span>
+                <span class="detail-value">{{ authState.userDetails()?.firstName }}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Last Name:</span>
+                <span class="detail-value">{{ authState.userDetails()?.lastName }}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Email:</span>
+                <span class="detail-value">{{ authState.userDetails()?.email }}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Course:</span>
+                <span class="detail-value">{{ authState.userDetails()?.course || 'N/A' }}</span>
+              </div>
+            </div>
+            
+            <button class="logout-btn" (click)="logout()">Logout</button>
+          </div>
+        }
+      </div>
+    } @else {
+      <button class="about-btn" (click)="openLogin()">
+        Login
+      </button>
+    }
   </div>
 </header>

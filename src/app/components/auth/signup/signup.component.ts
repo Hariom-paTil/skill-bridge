@@ -56,8 +56,19 @@ export class SignupComponent {
         
         this.successMessage = 'Registration successful!';
         
-        // Set logged in state
-        this.authState.login(this.firstName);
+        // Set logged in state with full details
+        const courseNames: Record<string, string> = {
+          'imca': 'IMCA',
+          'bca': 'BCA',
+          'bba': 'BBA',
+          'bms': 'BMS'
+        };
+        this.authState.login(
+          this.firstName, 
+          this.lastName, 
+          this.email, 
+          courseNames[this.education]
+        );
         
         // Close modal first
         this.modal.close();
