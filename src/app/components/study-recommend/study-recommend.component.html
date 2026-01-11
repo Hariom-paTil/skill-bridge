@@ -3,43 +3,104 @@
 		<div>
 			<p class="eyebrow">Learning plan</p>
 			<h2>Study Recommendations</h2>
-			<p class="lede">Choose a focus and level to get curated study tracks with resources.</p>
+			<p class="lede">Tell us your goals and current skills to receive personalized learning paths.</p>
 		</div>
 		<img [src]="imageSrc" alt="Study Recommendations" class="tool-visual" />
 	</header>
 
-	<div class="input-grid">
-		<label class="field">
-			<span class="field-label">Focus area</span>
-			<input
-				name="query"
-				[(ngModel)]="query"
-				placeholder="e.g. frontend, backend, data, ml"
-			/>
+	<div class="form-container">
+		<div class="input-grid">
+			<label class="field required">
+				<span class="field-label">
+					<span class="label-text">Targeted Skill / Role</span>
+					<span class="required-mark">*</span>
+				</span>
+				<input
+					name="targetedSkill"
+					[(ngModel)]="targetedSkill"
+					placeholder="e.g., .NET Backend Developer, Full Stack Engineer, Data Analyst"
+					required
+				/>
+				<span class="field-hint">The main skill or role you want to learn</span>
+			</label>
+
+			<label class="field">
+				<span class="field-label">Skills You Already Know</span>
+				<input
+					name="knownSkills"
+					[(ngModel)]="knownSkills"
+					placeholder="e.g., Entity Framework, Repository Pattern, SQL"
+				/>
+				<span class="field-hint">Comma-separated list of your current skills</span>
+			</label>
+		</div>
+
+		<div class="input-grid-three">
+			<label class="field">
+				<span class="field-label">Experience Level</span>
+				<select name="experienceLevel" [(ngModel)]="experienceLevel">
+					<option value="beginner">Beginner - Just starting out</option>
+					<option value="intermediate">Intermediate - Some experience</option>
+					<option value="advanced">Advanced - Building expertise</option>
+				</select>
+			</label>
+
+			<label class="field">
+				<span class="field-label">Time Commitment (hrs/week)</span>
+				<select name="timeCommitment" [(ngModel)]="timeCommitment">
+					<option value="1-5">1-5 hours</option>
+					<option value="5-10">5-10 hours</option>
+					<option value="10-20">10-20 hours</option>
+					<option value="20+">20+ hours</option>
+				</select>
+			</label>
+
+			<label class="field">
+				<span class="field-label">Preferred Format</span>
+				<select name="preferredFormat" [(ngModel)]="preferredFormat">
+					<option value="video">Video Tutorials</option>
+					<option value="reading">Reading & Documentation</option>
+					<option value="interactive">Interactive Courses</option>
+					<option value="mixed">Mixed (Recommended)</option>
+				</select>
+			</label>
+		</div>
+
+		<label class="field field-full">
+			<span class="field-label">Learning Goals (Optional)</span>
+			<textarea
+				name="learningGoals"
+				[(ngModel)]="learningGoals"
+				placeholder="Describe what you want to achieve... e.g., 'Build scalable REST APIs with clean architecture' or 'Prepare for a .NET developer interview'"
+				rows="3"
+			></textarea>
+			<span class="field-hint">Help us understand your objectives better</span>
 		</label>
 
-		<label class="field">
-			<span class="field-label">Level</span>
-			<select name="level" [(ngModel)]="level">
-				<option value="beginner">Beginner</option>
-				<option value="intermediate">Intermediate</option>
-				<option value="advanced">Advanced</option>
-			</select>
-		</label>
-
-		<button type="button" class="primary" (click)="recommend()">Get recommendations</button>
+		<button type="button" class="primary" (click)="recommend()">
+			<span class="button-icon">🎯</span>
+			Get Personalized Recommendations
+		</button>
 	</div>
 
 	<p class="status">{{ note }}</p>
 
 	<div class="results" *ngIf="recommendations.length">
+		<div class="results-header">
+			<h3>📚 Your Personalized Learning Paths</h3>
+			<p class="results-info">Based on your input, we've curated these tracks for you</p>
+		</div>
+
 		<article class="result-card" *ngFor="let path of recommendations">
 			<header class="result-header">
 				<div>
-					<p class="eyebrow">Track</p>
+					<p class="eyebrow">Learning Track</p>
 					<h3>{{ path.name }}</h3>
 				</div>
-				<p class="summary">Duration: {{ path.duration }}</p>
+				<div class="duration-badge">
+					<span class="duration-icon">⏱️</span>
+					<span>{{ path.duration }}</span>
+				</div>
 			</header>
 
 			<div class="pill-row">
@@ -47,14 +108,20 @@
 			</div>
 
 			<div class="columns">
-				<div>
-					<p class="subhead">Skills to build</p>
+				<div class="column-card">
+					<p class="subhead">
+						<span class="icon">✨</span>
+						Skills to build
+					</p>
 					<ul>
 						<li *ngFor="let skill of path.skills">{{ skill }}</li>
 					</ul>
 				</div>
-				<div>
-					<p class="subhead">Suggested resources</p>
+				<div class="column-card">
+					<p class="subhead">
+						<span class="icon">📖</span>
+						Suggested resources
+					</p>
 					<ul>
 						<li *ngFor="let resource of path.resources">{{ resource }}</li>
 					</ul>
