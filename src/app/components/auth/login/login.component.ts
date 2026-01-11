@@ -38,7 +38,13 @@ export class LoginComponent {
         const firstName = response.firstName || this.email.split('@')[0];
         const lastName = response.lastName || '';
         const email = this.email;
-        const course = response.course || response.education || '';
+        const courseById: Record<number, string> = {
+          101: 'IMCA',
+          104: 'BCA',
+          102: 'BBA',
+          103: 'BMS'
+        };
+        const course = response.course || response.education || courseById[response.educationId] || '';
         
         this.authState.login(firstName, lastName, email, course);
         

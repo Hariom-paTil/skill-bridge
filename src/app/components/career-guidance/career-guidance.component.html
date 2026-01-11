@@ -10,73 +10,81 @@
 
 	<form class="input-grid" (ngSubmit)="generateGuidance()">
 		<label class="field">
-			<span class="field-label">Interests</span>
-			<textarea
-				name="interests"
-				[(ngModel)]="profile.interests"
-				rows="3"
-				placeholder="e.g. APIs, cloud, solving performance issues"
-			></textarea>
+			<span class="field-label">Name</span>
+			<input
+				name="name"
+				[(ngModel)]="profile.name"
+				type="text"
+				placeholder="Your name"
+				disabled
+			/>
 		</label>
 
 		<label class="field">
-			<span class="field-label">Strengths</span>
-			<textarea
-				name="strengths"
-				[(ngModel)]="profile.strengths"
-				rows="3"
-				placeholder="e.g. debugging, SQL, UI polish"
-			></textarea>
+			<span class="field-label">Course</span>
+			<input
+				name="course"
+				[(ngModel)]="profile.course"
+				type="text"
+				placeholder="Your course"
+				disabled
+			/>
 		</label>
 
 		<label class="field">
-			<span class="field-label">Goal</span>
-			<select name="goal" [(ngModel)]="profile.goal">
-				<option value="break-into-tech">Break into tech</option>
-				<option value="pivot">Pivot from another domain</option>
-				<option value="level-up">Level up in current role</option>
-			</select>
+			<span class="field-label">Future Goal</span>
+			<input
+				name="futureGoal"
+				[(ngModel)]="profile.futureGoal"
+				type="text"
+				placeholder="e.g. Backend Engineer, Data Analyst"
+			/>
+		</label>
+
+		<label class="field wide">
+			<span class="field-label">Current Skills</span>
+			<textarea
+				name="currentSkills"
+				[(ngModel)]="profile.currentSkills"
+				rows="3"
+				placeholder="e.g. SQL, TypeScript, problem solving"
+			></textarea>
+		</label>
+
+		<label class="field wide">
+			<span class="field-label">Description</span>
+			<textarea
+				name="description"
+				[(ngModel)]="profile.description"
+				rows="3"
+				placeholder="Briefly describe your interests or experience"
+			></textarea>
 		</label>
 
 		<button type="submit" class="primary">Generate guidance</button>
 	</form>
 
-	<p class="status">{{ statusText }}</p>
+		<!-- Loading and error messages -->
+		<div class="status" *ngIf="loading">Generating personalized guidance…</div>
+		<div class="status" *ngIf="!loading && errorMessage">{{ errorMessage }}</div>
 
-	<div class="results" *ngIf="recommendations.length">
-		<article class="result-card" *ngFor="let track of recommendations">
-			<header class="result-header">
-				<div>
-					<p class="eyebrow">Track</p>
-					<h3>{{ track.title }}</h3>
-				</div>
-				<p class="summary">{{ track.summary }}</p>
+		<!-- Results Modal -->
+		<div class="results-modal" *ngIf="showResultsModal">
+		<div class="modal-backdrop" (click)="closeModal()"></div>
+		<div class="modal-content">
+			<button class="modal-close" (click)="closeModal()">×</button>
+			<header class="modal-header">
+				<h3>Your Personalized Career Guidance</h3>
+				<p class="modal-sub">AI-powered insights based on your profile</p>
 			</header>
-
-			<div class="pill-row">
-				<span class="pill" *ngFor="let fit of track.bestFor">{{ fit }}</span>
-			</div>
-
-			<div class="columns">
-				<div>
-					<p class="subhead">Core skills</p>
-					<ul>
-						<li *ngFor="let skill of track.skills">{{ skill }}</li>
-					</ul>
+			<section class="modal-body">
+				<div class="guidance-display" (click)="skipTyping()">
+					<div class="guidance-content" [innerText]="displayedContent"></div>
+					<span class="typing-cursor" *ngIf="isTyping">▋</span>
 				</div>
-				<div>
-					<p class="subhead">First steps</p>
-					<ul>
-						<li *ngFor="let step of track.firstSteps">{{ step }}</li>
-					</ul>
+				<div class="skip-hint" *ngIf="isTyping">
+					<small>Click anywhere to skip animation</small>
 				</div>
-				<div>
-					<p class="subhead">Sample roles</p>
-					<ul>
-						<li *ngFor="let role of track.sampleRoles">{{ role }}</li>
-					</ul>
-				</div>
-			</div>
-		</article>
+			</section>
+		</div>
 	</div>
-</section>
