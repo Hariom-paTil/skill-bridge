@@ -40,6 +40,13 @@ export class SignupComponent {
       'bms': 103
     };
 
+    const courseNames: Record<string, string> = {
+      'imca': 'IMCA',
+      'bca': 'BCA',
+      'bba': 'BBA',
+      'bms': 'BMS'
+    };
+
     const payload = {
       firstName: this.firstName,
       lastName: this.lastName,
@@ -57,17 +64,13 @@ export class SignupComponent {
         this.successMessage = 'Registration successful!';
         
         // Set logged in state with full details
-        const courseNames: Record<string, string> = {
-          'imca': 'IMCA',
-          'bca': 'BCA',
-          'bba': 'BBA',
-          'bms': 'BMS'
-        };
+        const educationId = educationIdMap[this.education];
         this.authState.login(
           this.firstName, 
           this.lastName, 
           this.email, 
-          courseNames[this.education]
+          courseNames[this.education],
+          educationId
         );
         
         // Close modal first
@@ -89,7 +92,9 @@ export class SignupComponent {
         if (error.status === 200 || error.status === 201) {
           console.log('Status 200/201 detected - treating as success');
           this.successMessage = 'Registration successful!';
-          this.authState.login(this.firstName);
+          const courseName = courseNames[this.education];
+          const educationId = educationIdMap[this.education];
+          this.authState.login(this.firstName, this.lastName, this.email, courseName, educationId);
           this.modal.close();
           setTimeout(() => {
             this.celebration.celebrate(this.firstName);

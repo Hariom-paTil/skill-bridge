@@ -4,6 +4,8 @@
 
 <app-features-section (toolSelected)="openTool($event)"></app-features-section>
 
+<app-top-apps></app-top-apps>
+
 <div class="modal" *ngIf="activeTool">
 	<div class="modal-backdrop" (click)="closeTool()"></div>
 	<div class="modal-content">

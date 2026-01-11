@@ -1,0 +1,65 @@
+<section class="top-apps">
+  <div class="container">
+    <div class="header">
+      <div>
+        <p class="eyebrow">Top Tech Apps According to Your Course or Degree or Field</p>
+        <h2>Explore the best tools for your studies</h2>
+      </div>
+      <p class="hint">Click an app to see details, a link, and a quick description.</p>
+    </div>
+
+    <!-- Not logged in message -->
+    <ng-container *ngIf="!showSection(); else loggedIn">
+      <div class="login-message">
+        <p>Please log in to see personalized app recommendations for your course.</p>
+        <button class="login-btn" type="button">Log In Now</button>
+      </div>
+    </ng-container>
+
+    <!-- Logged in content -->
+    <ng-template #loggedIn>
+      <ng-container *ngIf="apps.length; else loading">
+        <div class="marquee" [class.paused]="selectedApp">
+          <div class="marquee-track">
+            <button
+              class="app-card"
+              *ngFor="let app of doubledApps; trackBy: trackByName"
+              type="button"
+              (click)="selectApp(app)"
+              [attr.aria-label]="'Open details for ' + app.name"
+            >
+              <span class="app-icon" [style.background]="app.tint">{{ app.icon }}</span>
+              <span class="app-name">{{ app.name }}</span>
+            </button>
+          </div>
+          <div class="edge fade-left"></div>
+          <div class="edge fade-right"></div>
+        </div>
+      </ng-container>
+      <ng-template #loading>
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>Fetching your personalized apps...</p>
+        </div>
+      </ng-template>
+    </ng-template>
+  </div>
+
+  <!-- App modal -->
+  <div class="app-modal" *ngIf="selectedApp">
+    <div class="backdrop" (click)="closeModal()"></div>
+    <div class="modal-card">
+      <button class="close" type="button" [attr.aria-label]="'Close'" (click)="closeModal()">×</button>
+      <div class="modal-header">
+        <span class="app-icon" [style.background]="selectedApp.tint">{{ selectedApp.icon }}</span>
+        <div class="modal-title">
+          <h3>{{ selectedApp.name }}</h3>
+        </div>
+      </div>
+      <p class="modal-description">{{ selectedApp.description }}</p>
+      <a class="app-link" [href]="selectedApp.link" target="_blank" rel="noopener noreferrer">
+        Open {{ selectedApp.name }}
+      </a>
+    </div>
+  </div>
+</section>

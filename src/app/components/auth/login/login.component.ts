@@ -45,8 +45,9 @@ export class LoginComponent {
           103: 'BMS'
         };
         const course = response.course || response.education || courseById[response.educationId] || '';
+        const educationId = response.educationId || this.deriveEducationId(response.course || response.education);
         
-        this.authState.login(firstName, lastName, email, course);
+        this.authState.login(firstName, lastName, email, course, educationId);
         
         // Store token if needed: localStorage.setItem('token', response.token);
         // Close modal after 1 second
@@ -62,5 +63,19 @@ export class LoginComponent {
 
   switchToSignup() {
     this.modal.showSignup();
+  }
+
+  private deriveEducationId(course?: string): number | undefined {
+    if (!course) {
+      return undefined;
+    }
+    const normalized = course.toLowerCase();
+    const map: Record<string, number> = {
+      'imca': 101,
+      'bca': 104,
+      'bba': 102,
+      'bms': 103
+    };
+    return map[normalized];
   }
 }

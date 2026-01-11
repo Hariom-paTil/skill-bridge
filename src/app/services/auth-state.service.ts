@@ -6,6 +6,7 @@ export interface UserDetails {
   lastName: string;
   email: string;
   course: string;
+  educationId?: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -15,7 +16,7 @@ export class AuthStateService {
   userName = signal('');
   userDetails = signal<UserDetails | null>(null);
 
-  login(firstName: string, lastName?: string, email?: string, course?: string) {
+  login(firstName: string, lastName?: string, email?: string, course?: string, educationId?: number) {
     this.isLoggedIn.set(true);
     this.userName.set(firstName);
     
@@ -23,7 +24,8 @@ export class AuthStateService {
       firstName,
       lastName: lastName || '',
       email: email || '',
-      course: course || ''
+      course: course || '',
+      educationId
     };
     this.userDetails.set(details);
     
