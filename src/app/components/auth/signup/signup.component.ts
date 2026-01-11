@@ -35,7 +35,7 @@ export class SignupComponent {
 
     const educationIdMap: Record<string, number> = {
       'imca': 101,
-      'bca': 101,
+      'bca': 104,
       'bba': 102,
       'bms': 103
     };
