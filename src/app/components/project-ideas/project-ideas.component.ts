@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthStateService } from '../../services/auth-state.service';
+import { AuthModalService } from '../../services/auth-modal.service';
 
 interface ProjectIdea {
   title: string;
@@ -19,6 +21,9 @@ interface ProjectIdea {
   styleUrl: './project-ideas.component.scss'
 })
 export class ProjectIdeasComponent {
+  private authState = inject(AuthStateService);
+  private authModal = inject(AuthModalService);
+
   filters = {
     domain: 'web',
     level: 'beginner'
@@ -79,6 +84,11 @@ export class ProjectIdeasComponent {
   statusText = 'Choose your domain and level to get personalized project ideas.';
 
   generate(): void {
+    if (!this.authState.isLoggedIn()) {
+      this.authModal.showLogin();
+      return;
+    }
+
     const filtered = this.projectIdeas.filter(idea => idea.difficulty === this.filters.level);
     this.ideas = filtered.length ? filtered : this.projectIdeas.slice(0, 3);
     this.statusText = `Showing ${this.ideas.length} project ideas for ${this.filters.level} level`;

@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthStateService } from '../../services/auth-state.service';
+import { AuthModalService } from '../../services/auth-modal.service';
 
 interface Internship {
   title: string;
@@ -19,6 +21,9 @@ interface Internship {
   styleUrl: './internship-finder.component.scss'
 })
 export class InternshipFinderComponent {
+  private authState = inject(AuthStateService);
+  private authModal = inject(AuthModalService);
+
   filters = {
     keyword: '',
     location: '',
@@ -66,6 +71,11 @@ export class InternshipFinderComponent {
   resultNote = 'Filter by role, location, or mode to see matching internships.';
 
   find(): void {
+    if (!this.authState.isLoggedIn()) {
+      this.authModal.showLogin();
+      return;
+    }
+
     const keyword = this.filters.keyword.toLowerCase();
     const location = this.filters.location.toLowerCase();
     const type = this.filters.type;

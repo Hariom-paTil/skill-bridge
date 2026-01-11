@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthStateService } from '../../services/auth-state.service';
+import { AuthModalService } from '../../services/auth-modal.service';
 
 interface StudyPath {
   name: string;
@@ -18,6 +20,9 @@ interface StudyPath {
   styleUrl: './study-recommend.component.scss'
 })
 export class StudyRecommendComponent {
+  private authState = inject(AuthStateService);
+  private authModal = inject(AuthModalService);
+
   query = '';
   level = 'beginner';
 
@@ -58,6 +63,11 @@ export class StudyRecommendComponent {
   note = 'Pick a focus and level to tailor study tracks.';
 
   recommend(): void {
+    if (!this.authState.isLoggedIn()) {
+      this.authModal.showLogin();
+      return;
+    }
+
     const tokens = this.query.toLowerCase().split(/[,\s]+/).filter(Boolean);
 
     const filtered = this.paths.filter((path) =>

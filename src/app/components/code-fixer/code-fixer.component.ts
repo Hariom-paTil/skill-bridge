@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthStateService } from '../../services/auth-state.service';
+import { AuthModalService } from '../../services/auth-modal.service';
 
 interface Finding {
   issue: string;
@@ -16,6 +18,9 @@ interface Finding {
   styleUrl: './code-fixer.component.scss'
 })
 export class CodeFixerComponent {
+  private authState = inject(AuthStateService);
+  private authModal = inject(AuthModalService);
+
   snippet = '';
   language = 'typescript';
   context = '';
@@ -24,6 +29,11 @@ export class CodeFixerComponent {
   imageSrc = 'assets/code.png';
 
   analyze(): void {
+    if (!this.authState.isLoggedIn()) {
+      this.authModal.showLogin();
+      return;
+    }
+
     const trimmed = this.snippet.trim();
     this.findings = [];
 

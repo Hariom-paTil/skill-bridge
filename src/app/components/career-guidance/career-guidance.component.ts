@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthStateService } from '../../services/auth-state.service';
+import { AuthModalService } from '../../services/auth-modal.service';
 
 interface CareerTrack {
   title: string;
@@ -19,6 +21,9 @@ interface CareerTrack {
   styleUrl: './career-guidance.component.scss'
 })
 export class CareerGuidanceComponent {
+  private authState = inject(AuthStateService);
+  private authModal = inject(AuthModalService);
+
   profile = {
     interests: '',
     strengths: '',
@@ -74,6 +79,11 @@ export class CareerGuidanceComponent {
   statusText = 'Share what you enjoy and we will tailor a path.';
 
   generateGuidance(): void {
+    if (!this.authState.isLoggedIn()) {
+      this.authModal.showLogin();
+      return;
+    }
+
     const interestTokens = `${this.profile.interests} ${this.profile.strengths}`
       .toLowerCase()
       .split(/[,\s]+/)
