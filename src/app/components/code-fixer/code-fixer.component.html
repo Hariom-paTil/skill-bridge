@@ -3,7 +3,7 @@
 		<div>
 			<p class="eyebrow">Debug helper</p>
 			<h2>Code Error Fixer</h2>
-			<p class="lede">Paste a snippet or stack trace and get quick checks before you debug deeper.</p>
+			<p class="lede">Send your snippet to the CodeFixer API and see fixes with a ChatGPT-style reveal.</p>
 		</div>
 		<img [src]="imageSrc" alt="Code Error Fixer" class="tool-visual" />
 	</header>
@@ -12,6 +12,7 @@
 		<label class="field">
 			<span class="field-label">Language</span>
 			<select name="language" [(ngModel)]="language">
+				<option value="C#">C#</option>
 				<option value="typescript">TypeScript / JavaScript</option>
 				<option value="python">Python</option>
 				<option value="java">Java</option>
@@ -20,11 +21,11 @@
 		</label>
 
 		<label class="field">
-			<span class="field-label">Context</span>
+			<span class="field-label">Context / Error message</span>
 			<input
 				name="context"
 				[(ngModel)]="context"
-				placeholder="e.g. fails in production, happens on form submit"
+				placeholder="e.g. build fails on CI, exception on submit"
 			/>
 		</label>
 	</div>
@@ -34,20 +35,45 @@
 		<textarea
 			name="snippet"
 			[(ngModel)]="snippet"
-			rows="8"
+			rows="10"
 			placeholder="Paste code here..."
 		></textarea>
 	</label>
 
-	<button type="button" class="primary" (click)="analyze()">Find issues</button>
+	<button type="button" class="primary" (click)="fixCode()" [disabled]="isLoading">
+		<span *ngIf="!isLoading">Fix with API</span>
+		<span *ngIf="isLoading" class="spinner">Fixing…</span>
+	</button>
 
-	<p class="status">{{ suggestion }}</p>
+	<p class="status" *ngIf="!errorMessage && !result">Paste your snippet and run the fixer.</p>
+	<p class="status error" *ngIf="errorMessage">{{ errorMessage }}</p>
 
-	<div class="results" *ngIf="findings.length">
-		<article class="result-card" *ngFor="let finding of findings">
-			<div class="badge" [ngClass]="finding.severity">{{ finding.severity }}</div>
-			<p class="subhead">{{ finding.issue }}</p>
-			<p class="summary">{{ finding.fix }}</p>
+	<div class="results" *ngIf="result">
+		<article class="result-card highlight">
+			<p class="subhead">Error reason</p>
+			<p class="summary"><strong>{{ result.errorReason }}</strong></p>
+		</article>
+
+		<article class="result-card">
+			<p class="subhead">Explanation</p>
+			<p class="summary">{{ result.explanation }}</p>
+		</article>
+
+		<article class="result-card code-card">
+			<div class="code-header">
+				<span class="dot red"></span>
+				<span class="dot yellow"></span>
+				<span class="dot green"></span>
+				<span class="code-title">Fixed code</span>
+			</div>
+			<pre class="code-block"><code>{{ displayedCode }}</code><span class="cursor" *ngIf="isLoading || displayedCode !== result.fixedCode">▍</span></pre>
+		</article>
+
+		<article class="result-card">
+			<p class="subhead">Best practices</p>
+			<ul class="best-list">
+				<li *ngFor="let item of result.bestPractices">{{ item }}</li>
+			</ul>
 		</article>
 	</div>
 </section>

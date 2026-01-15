@@ -95,6 +95,17 @@ button.primary {
 	cursor: pointer;
 	box-shadow: 0 16px 40px rgba(122, 162, 255, 0.25);
 	transition: transform 0.15s ease, box-shadow 0.2s ease;
+	min-width: 150px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+
+	&:disabled {
+		opacity: 0.7;
+		cursor: not-allowed;
+		box-shadow: none;
+	}
 
 	&:hover {
 		transform: translateY(-1px);
@@ -102,9 +113,30 @@ button.primary {
 	}
 }
 
+.spinner {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+
+	&::before {
+		content: '';
+		display: inline-block;
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		border: 2px solid rgba(11, 18, 32, 0.25);
+		border-top-color: #0b1220;
+		animation: spin 0.8s linear infinite;
+	}
+}
+
 .status {
 	margin: 10px 0 18px;
 	color: #9fb3d9;
+
+	&.error {
+		color: #ffc7d4;
+	}
 }
 
 .results {
@@ -119,12 +151,75 @@ button.primary {
 	border: 1px solid rgba(122, 162, 255, 0.25);
 	border-radius: 14px;
 	padding: 16px 14px 14px 14px;
+	box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+
+	&.highlight {
+		border-color: rgba(122, 162, 255, 0.6);
+		background: linear-gradient(145deg, rgba(122, 162, 255, 0.12), rgba(11, 18, 32, 0.9));
+	}
 
 	.summary {
 		margin: 6px 0 0 0;
 		color: #c8d6f2;
 		line-height: 1.5;
 	}
+}
+
+.code-card {
+	grid-column: 1 / -1;
+	padding: 0;
+	overflow: hidden;
+
+	.code-header {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 12px 14px;
+		background: rgba(255, 255, 255, 0.03);
+		border-bottom: 1px solid rgba(122, 162, 255, 0.2);
+
+		.dot {
+			width: 10px;
+			height: 10px;
+			border-radius: 50%;
+			display: inline-block;
+
+			&.red { background: #ff5f56; }
+			&.yellow { background: #ffbd2e; }
+			&.green { background: #27c93f; }
+		}
+
+		.code-title {
+			font-weight: 700;
+			color: #d9e3f5;
+			margin-left: 6px;
+		}
+	}
+
+	.code-block {
+		margin: 0;
+		padding: 16px;
+		background: rgba(0, 0, 0, 0.35);
+		color: #dbe5ff;
+		font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+		font-size: 13px;
+		line-height: 1.6;
+		white-space: pre-wrap;
+		min-height: 160px;
+	}
+
+	.cursor {
+		margin-left: 4px;
+		color: #7aa2ff;
+		animation: blink 0.8s steps(2, start) infinite;
+	}
+}
+
+.best-list {
+	margin: 6px 0 0;
+	padding-left: 18px;
+	color: #c8d6f2;
+	line-height: 1.6;
 }
 
 .badge {
@@ -165,4 +260,13 @@ button.primary {
 	.tool-panel {
 		padding: 24px;
 	}
+}
+
+@keyframes spin {
+	from { transform: rotate(0deg); }
+	to { transform: rotate(360deg); }
+}
+
+@keyframes blink {
+	50% { opacity: 0; }
 }
