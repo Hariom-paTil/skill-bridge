@@ -8,7 +8,7 @@
     <nav class="nav-menu">
       <a href="#" class="nav-link active">Home</a>
       <a href="#" class="nav-link" (click)="scrollToTopApps(); $event.preventDefault()">TopAPP</a>
-      <a href="#" class="nav-link">StudyRoad</a>
+      <a href="#" class="nav-link" (click)="toggleStudyRoad(); $event.preventDefault()">StudyRoad</a>
       <a href="#" class="nav-link">Career Guide</a>
       <a href="#" class="nav-link">Internships</a>
       <a href="#" class="nav-link">Code Fixer</a>
@@ -61,3 +61,8 @@
     }
   </div>
 </header>
+
+<!-- StudyRoad Modal -->
+@if (showStudyRoad) {
+  <app-study-road (closeModal)="closeStudyRoad()"></app-study-road>
+}

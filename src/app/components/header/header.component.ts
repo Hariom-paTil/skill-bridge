@@ -1,12 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ViewportScroller } from '@angular/common';
+import { ViewportScroller, CommonModule } from '@angular/common';
 import { AuthModalService } from '../../services/auth-modal.service';
 import { AuthStateService } from '../../services/auth-state.service';
+import { StudyRoadComponent } from '../study-road/study-road.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, StudyRoadComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
@@ -15,6 +16,7 @@ export class HeaderComponent implements OnInit {
   authState = inject(AuthStateService);
   viewportScroller = inject(ViewportScroller);
   showProfileDropdown = false;
+  showStudyRoad = false;
 
   ngOnInit() {
     this.authState.checkAuthStatus();
@@ -26,6 +28,14 @@ export class HeaderComponent implements OnInit {
 
   toggleProfileDropdown() {
     this.showProfileDropdown = !this.showProfileDropdown;
+  }
+
+  toggleStudyRoad() {
+    this.showStudyRoad = !this.showStudyRoad;
+  }
+
+  closeStudyRoad() {
+    this.showStudyRoad = false;
   }
 
   logout() {

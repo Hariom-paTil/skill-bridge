@@ -1,0 +1,131 @@
+<div class="study-road-modal-wrapper">
+  <!-- Backdrop -->
+  <div class="backdrop" (click)="closeExpertDetail()"></div>
+
+  <!-- Modal Content -->
+  <section class="study-road-section">
+    <!-- Header -->
+    <header class="study-road-header">
+      <button class="close-btn" (click)="closeExpertDetail()">✕</button>
+      <div class="header-content">
+        <p class="eyebrow">Expert Guidance</p>
+        <h1>Study Road with Expert Advice</h1>
+        <p class="description">Learn from industry experts who share their knowledge, experience, and best practices to help you succeed.</p>
+      </div>
+    </header>
+
+    <!-- Experts Grid -->
+    <div class="experts-container" *ngIf="!showExpertDetail">
+    <div class="experts-grid">
+      <article 
+        class="expert-card" 
+        *ngFor="let expert of experts"
+        (click)="selectExpert(expert)"
+      >
+        <div class="expert-image" [class.gradient-bg]="expert.image.includes('expert-')">
+          <img [src]="expert.image" [alt]="expert.name" />
+          <div class="expert-overlay">
+            <button class="view-btn">View Profile</button>
+          </div>
+        </div>
+        <div class="expert-info">
+          <h3 class="expert-name">{{ expert.name }}</h3>
+          <p class="expert-position">{{ expert.position }}</p>
+          <div class="expert-expertise">
+            <span class="expertise-tag" *ngFor="let skill of expert.expertise | slice:0:3">
+              {{ skill }}
+            </span>
+            <span class="expertise-more" *ngIf="expert.expertise.length > 3">
+              +{{ expert.expertise.length - 3 }} more
+            </span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <!-- Expert Detail View -->
+  <div class="expert-detail-modal" *ngIf="showExpertDetail && selectedExpert" [class.show]="showExpertDetail">
+    <div class="expert-detail-content">
+      <!-- Close Button -->
+      <button class="close-btn" (click)="closeExpertDetail()">✕</button>
+
+      <!-- Expert Header -->
+      <div class="expert-detail-header">
+        <img [src]="selectedExpert.image" [alt]="selectedExpert.name" class="expert-detail-image" />
+        <div class="expert-detail-info">
+          <h2 class="expert-detail-name">{{ selectedExpert.name }}</h2>
+          <p class="expert-detail-position">{{ selectedExpert.position }}</p>
+          <p class="expert-detail-bio">{{ selectedExpert.bio }}</p>
+          <div class="expertise-list">
+            <span class="expertise-badge" *ngFor="let skill of selectedExpert.expertise">
+              {{ skill }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Blog Posts -->
+      <div class="blog-posts-section">
+        <h3 class="section-title">📚 Blog Posts & Advice</h3>
+        
+        <!-- Blog List -->
+        <div class="blog-list" *ngIf="!selectedBlog">
+          <article 
+            class="blog-item" 
+            *ngFor="let post of selectedExpert.blog"
+            (click)="selectBlog(post)"
+          >
+            <div class="blog-header">
+              <span class="blog-icon">{{ post.icon }}</span>
+              <div class="blog-meta">
+                <h4 class="blog-title">{{ post.title }}</h4>
+                <div class="blog-info">
+                  <span class="blog-date">{{ post.date }}</span>
+                  <span class="blog-separator">•</span>
+                  <span class="blog-time">{{ post.readTime }}</span>
+                </div>
+              </div>
+            </div>
+            <p class="blog-excerpt">{{ post.excerpt }}</p>
+            <button class="read-more-btn">Read Full Article →</button>
+          </article>
+        </div>
+
+        <!-- Blog Detail View -->
+        <div class="blog-detail" *ngIf="selectedBlog" [class.show]="showBlogDetail">
+          <button class="back-btn" (click)="closeBlogDetail()">← Back to Posts</button>
+          
+          <article class="blog-full-content">
+            <header class="blog-content-header">
+              <span class="blog-content-icon">{{ selectedBlog.icon }}</span>
+              <h2 class="blog-content-title">{{ selectedBlog.title }}</h2>
+              <div class="blog-content-meta">
+                <span class="date">{{ selectedBlog.date }}</span>
+                <span class="separator">•</span>
+                <span class="time">{{ selectedBlog.readTime }}</span>
+              </div>
+            </header>
+
+            <div class="blog-content-body">
+              <p *ngFor="let paragraph of selectedBlog.content.split('\n\n')" class="content-paragraph">
+                {{ paragraph }}
+              </p>
+            </div>
+
+            <footer class="blog-content-footer">
+              <div class="author-info">
+                <img [src]="selectedExpert.image" [alt]="selectedExpert.name" class="author-avatar" />
+                <div class="author-details">
+                  <h4 class="author-name">{{ selectedExpert.name }}</h4>
+                  <p class="author-bio">{{ selectedExpert.position }}</p>
+                </div>
+              </div>
+            </footer>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+  </section>
+</div>
