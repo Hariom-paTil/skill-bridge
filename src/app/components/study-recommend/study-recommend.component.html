@@ -8,7 +8,8 @@
 		<img [src]="imageSrc" alt="Study Recommendations" class="tool-visual" />
 	</header>
 
-	<div class="form-container">
+	<!-- Form Container -->
+	<div class="form-container" [class.hidden]="showApiResult">
 		<div class="input-grid">
 			<label class="field required">
 				<span class="field-label">
@@ -20,6 +21,7 @@
 					[(ngModel)]="targetedSkill"
 					placeholder="e.g., .NET Backend Developer, Full Stack Engineer, Data Analyst"
 					required
+					[disabled]="isLoading"
 				/>
 				<span class="field-hint">The main skill or role you want to learn</span>
 			</label>
@@ -30,6 +32,7 @@
 					name="knownSkills"
 					[(ngModel)]="knownSkills"
 					placeholder="e.g., Entity Framework, Repository Pattern, SQL"
+					[disabled]="isLoading"
 				/>
 				<span class="field-hint">Comma-separated list of your current skills</span>
 			</label>
@@ -38,7 +41,7 @@
 		<div class="input-grid-three">
 			<label class="field">
 				<span class="field-label">Experience Level</span>
-				<select name="experienceLevel" [(ngModel)]="experienceLevel">
+				<select name="experienceLevel" [(ngModel)]="experienceLevel" [disabled]="isLoading">
 					<option value="beginner">Beginner - Just starting out</option>
 					<option value="intermediate">Intermediate - Some experience</option>
 					<option value="advanced">Advanced - Building expertise</option>
@@ -47,7 +50,7 @@
 
 			<label class="field">
 				<span class="field-label">Time Commitment (hrs/week)</span>
-				<select name="timeCommitment" [(ngModel)]="timeCommitment">
+				<select name="timeCommitment" [(ngModel)]="timeCommitment" [disabled]="isLoading">
 					<option value="1-5">1-5 hours</option>
 					<option value="5-10">5-10 hours</option>
 					<option value="10-20">10-20 hours</option>
@@ -57,7 +60,7 @@
 
 			<label class="field">
 				<span class="field-label">Preferred Format</span>
-				<select name="preferredFormat" [(ngModel)]="preferredFormat">
+				<select name="preferredFormat" [(ngModel)]="preferredFormat" [disabled]="isLoading">
 					<option value="video">Video Tutorials</option>
 					<option value="reading">Reading & Documentation</option>
 					<option value="interactive">Interactive Courses</option>
@@ -73,60 +76,87 @@
 				[(ngModel)]="learningGoals"
 				placeholder="Describe what you want to achieve... e.g., 'Build scalable REST APIs with clean architecture' or 'Prepare for a .NET developer interview'"
 				rows="3"
+				[disabled]="isLoading"
 			></textarea>
 			<span class="field-hint">Help us understand your objectives better</span>
 		</label>
 
-		<button type="button" class="primary" (click)="recommend()">
-			<span class="button-icon">🎯</span>
-			Get Personalized Recommendations
+		<button 
+			type="button" 
+			class="primary" 
+			(click)="recommend()"
+			[disabled]="isLoading"
+		>
+			<span class="button-icon" [class.spinner]="isLoading">{{ isLoading ? '⏳' : '🎯' }}</span>
+			{{ isLoading ? 'Generating Recommendations...' : 'Get Personalized Recommendations' }}
 		</button>
 	</div>
 
-	<p class="status">{{ note }}</p>
+	<!-- Status Message -->
+	<p class="status" [class.error]="error" [class.success]="!error && showApiResult">{{ note }}</p>
 
-	<div class="results" *ngIf="recommendations.length">
-		<div class="results-header">
-			<h3>📚 Your Personalized Learning Paths</h3>
-			<p class="results-info">Based on your input, we've curated these tracks for you</p>
+	<!-- API Response Display with Typing Animation -->
+	<div class="api-response-container" *ngIf="showApiResult && apiResponse && !error">
+		<div class="response-header">
+			<h3 class="response-title">🚀 Your Personalized Learning Path</h3>
+			<button 
+				class="reset-btn"
+				(click)="showApiResult = false; displayedContent = ''; targetedSkill = ''"
+				title="New Recommendation"
+			>
+				↻ New Recommendation
+			</button>
 		</div>
 
-		<article class="result-card" *ngFor="let path of recommendations">
-			<header class="result-header">
-				<div>
-					<p class="eyebrow">Learning Track</p>
-					<h3>{{ path.name }}</h3>
-				</div>
-				<div class="duration-badge">
-					<span class="duration-icon">⏱️</span>
-					<span>{{ path.duration }}</span>
-				</div>
-			</header>
-
-			<div class="pill-row">
-				<span class="pill" *ngFor="let focus of path.focus">{{ focus }}</span>
+		<!-- Main Content with Typing Animation -->
+		<div class="recommendation-card">
+			<div class="target-role">
+				<span class="role-label">Target Role:</span>
+				<h2 class="role-name">{{ apiResponse.data.targetRole }}</h2>
 			</div>
 
-			<div class="columns">
-				<div class="column-card">
-					<p class="subhead">
-						<span class="icon">✨</span>
-						Skills to build
-					</p>
-					<ul>
-						<li *ngFor="let skill of path.skills">{{ skill }}</li>
-					</ul>
-				</div>
-				<div class="column-card">
-					<p class="subhead">
-						<span class="icon">📖</span>
-						Suggested resources
-					</p>
-					<ul>
-						<li *ngFor="let resource of path.resources">{{ resource }}</li>
-					</ul>
+			<!-- Learning Path Steps -->
+			<div class="learning-path-section">
+				<h3 class="path-header">📚 Learning Path</h3>
+				
+				<div class="steps-container">
+					<div 
+						class="step-card" 
+						*ngFor="let step of apiResponse.data.learningPath; let i = index"
+						[class.animate-in]="!isLoading"
+						[style.animation-delay]="(i * 0.1) + 's'"
+					>
+						<div class="step-number">{{ step.step }}</div>
+						<div class="step-content">
+							<h4 class="step-topic">{{ step.topic }}</h4>
+							<p class="step-why">
+								<span class="why-label">Why:</span>
+								{{ step.why }}
+							</p>
+						</div>
+					</div>
 				</div>
 			</div>
-		</article>
+
+			<!-- Typing Animation Content -->
+			<div class="typing-animation" *ngIf="isTypingAnimation && displayedContent">
+				<pre class="typing-content">{{ displayedContent }}<span class="cursor" *ngIf="displayedContent.length < 200"></span></pre>
+			</div>
+		</div>
+	</div>
+
+	<!-- Error Display -->
+	<div class="error-container" *ngIf="error">
+		<div class="error-content">
+			<p class="error-icon">❌</p>
+			<p class="error-message" [style.white-space]="'pre-wrap'" [style.word-wrap]="'break-word'">{{ error }}</p>
+			<button 
+				class="retry-btn"
+				(click)="showApiResult = false; error = null"
+			>
+				Try Again
+			</button>
+		</div>
 	</div>
 </section>
+

@@ -1,8 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthStateService } from '../../services/auth-state.service';
 import { AuthModalService } from '../../services/auth-modal.service';
+import { StudyRecommendationService, StudyRecommendationResponse, LearningPathStep } from '../../services/study-recommendation.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 interface StudyPath {
   name: string;
@@ -19,9 +22,11 @@ interface StudyPath {
   templateUrl: './study-recommend.component.html',
   styleUrl: './study-recommend.component.scss'
 })
-export class StudyRecommendComponent {
+export class StudyRecommendComponent implements OnDestroy {
   private authState = inject(AuthStateService);
   private authModal = inject(AuthModalService);
+  private studyRecommendationService = inject(StudyRecommendationService);
+  private destroy$ = new Subject<void>();
 
   targetedSkill = '';
   knownSkills = '';
@@ -31,6 +36,17 @@ export class StudyRecommendComponent {
   preferredFormat = 'mixed';
 
   imageSrc = 'assets/study_r.png';
+  
+  // API Response properties
+  apiResponse: StudyRecommendationResponse | null = null;
+  displayedContent: string = '';
+  isLoading = false;
+  error: string | null = null;
+  showApiResult = false;
+  
+  // Typing animation
+  isTypingAnimation = true;
+  typingSpeed = 15; // milliseconds per character
 
   paths: StudyPath[] = [
     {
@@ -105,32 +121,84 @@ export class StudyRecommendComponent {
       return;
     }
 
-    // Combine targeted skill and known skills for better matching
-    const searchTerms = [
-      ...this.targetedSkill.toLowerCase().split(/[,\s]+/).filter(Boolean),
-      ...this.knownSkills.toLowerCase().split(/[,\s]+/).filter(Boolean)
-    ];
+    this.isLoading = true;
+    this.error = null;
+    this.showApiResult = false;
+    this.displayedContent = '';
 
-    const filtered = this.paths.filter((path) =>
-      searchTerms.some((term) => 
-        path.focus.some((hint) => hint.toLowerCase().includes(term)) ||
-        path.name.toLowerCase().includes(term)
-      )
-    );
+    const payload = {
+      targetedSkill: this.targetedSkill,
+      knownSkills: this.knownSkills,
+      experienceLevel: this.experienceLevel,
+      learningGoals: this.learningGoals,
+      timeCommitment: this.timeCommitment,
+      preferredFormat: this.preferredFormat
+    };
 
-    this.recommendations = filtered.length ? filtered : this.paths.slice(0, 3);
-    
-    // Generate personalized note based on input
-    if (filtered.length > 0) {
-      const levelNote = this.experienceLevel === 'advanced'
-        ? 'Focus on advanced patterns and architecture.'
-        : this.experienceLevel === 'intermediate'
-        ? 'Build projects that combine multiple concepts.'
-        : 'Start with fundamentals and build strong foundations.';
-      
-      this.note = `✅ Found ${filtered.length} personalized learning path(s) for "${this.targetedSkill}". ${levelNote}`;
-    } else {
-      this.note = `No exact matches found for "${this.targetedSkill}". Showing general recommendations.`;
-    }
+    this.studyRecommendationService.getRecommendations(payload)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          this.apiResponse = response;
+          this.isLoading = false;
+          this.showApiResult = true;
+          this.note = `✅ Found personalized learning path for "${response.data.targetRole}"`;
+          this.startTypingAnimation();
+        },
+        error: (error) => {
+          this.isLoading = false;
+          const errorMsg = error?.message || 'Failed to fetch recommendations. Please try again.';
+          this.error = errorMsg;
+          this.note = `❌ ${errorMsg}`;
+          console.error('Recommendation error:', error);
+        }
+      });
+  }
+
+  /**
+   * Start typing animation for the response content
+   */
+  private startTypingAnimation(): void {
+    if (!this.apiResponse) return;
+
+    const content = this.generateFormattedContent();
+    let index = 0;
+
+    const typeNextCharacter = () => {
+      if (index < content.length) {
+        this.displayedContent += content[index];
+        index++;
+        setTimeout(typeNextCharacter, this.typingSpeed);
+      }
+    };
+
+    typeNextCharacter();
+  }
+
+  /**
+   * Generate formatted content from API response
+   */
+  private generateFormattedContent(): string {
+    if (!this.apiResponse?.data) return '';
+
+    const { targetRole, learningPath } = this.apiResponse.data;
+    let content = '';
+
+    // Title
+    content += `🎯 Recommended Role: ${targetRole}\n\n`;
+    content += `📚 Your Learning Path:\n\n`;
+
+    // Learning steps
+    learningPath.forEach((step) => {
+      content += `Step ${step.step}: ${step.topic}\n`;
+      content += `Why: ${step.why}\n\n`;
+    });
+
+    return content;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
