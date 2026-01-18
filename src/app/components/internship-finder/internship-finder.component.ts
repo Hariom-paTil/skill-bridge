@@ -1,16 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AuthStateService } from '../../services/auth-state.service';
-import { AuthModalService } from '../../services/auth-modal.service';
+import { InternshipRecommendationService } from '../../services/internship-recommendation.service';
 
-interface Internship {
-  title: string;
-  company: string;
+interface InternshipForm {
+  role: string;
+  workMode: '' | 'remote' | 'offline';
   location: string;
-  type: 'remote' | 'onsite' | 'hybrid';
-  stipend: string;
-  focus: string[];
+  qualification: string;
+  skills: string[];
 }
 
 @Component({
@@ -21,81 +19,112 @@ interface Internship {
   styleUrl: './internship-finder.component.scss'
 })
 export class InternshipFinderComponent {
-  private authState = inject(AuthStateService);
-  private authModal = inject(AuthModalService);
+  private internshipService = inject(InternshipRecommendationService);
+  isOpen = true;
+  isLoading = false;
 
-  filters = {
-    keyword: '',
+  form: InternshipForm = {
+    role: '',
+    workMode: '',
     location: '',
-    type: 'any'
+    qualification: '',
+    skills: []
   };
 
-  imageSrc = 'assets/internship.png';
+  manualSkill = '';
 
-  internships: Internship[] = [
-    {
-      title: 'Backend Intern',
-      company: 'CloudForge',
-      location: 'Remote',
-      type: 'remote',
-      stipend: '$1200/mo',
-      focus: ['node', 'api', 'sql']
-    },
-    {
-      title: 'Frontend Intern',
-      company: 'PixelCraft',
-      location: 'New York, NY',
-      type: 'onsite',
-      stipend: '$1100/mo',
-      focus: ['angular', 'typescript', 'ux']
-    },
-    {
-      title: 'Data Intern',
-      company: 'InsightLab',
-      location: 'Remote',
-      type: 'remote',
-      stipend: '$1300/mo',
-      focus: ['python', 'sql', 'analytics']
-    },
-    {
-      title: 'DevOps Intern',
-      company: 'ShipFast',
-      location: 'Austin, TX',
-      type: 'hybrid',
-      stipend: '$1250/mo',
-      focus: ['ci/cd', 'docker', 'monitoring']
+  roles = ['Backend', 'Frontend', 'AI/ML', 'Data Analyst', 'Data Engineer', 'Full Stack', 'UI/UX'];
+  locations = ['Pune', 'Mumbai', 'Bangalore', 'Hyderabad', 'Delhi', 'Chennai'];
+  qualifications = ['BCA', 'MCA', 'Diploma in IT', 'B.Sc CS', 'B.Tech CS', 'BBA', 'MBA'];
+
+  skillsByQualification: Record<string, string[]> = {
+    BCA: ['Java', 'HTML/CSS', 'JavaScript', 'SQL'],
+    MCA: ['Angular', 'C#', 'Java', 'SQL'],
+    'Diploma in IT': ['HTML/CSS', 'Basic Programming', 'IT Support'],
+    'B.Sc CS': ['Python', 'C', 'DBMS', 'Data Structures'],
+    'B.Tech CS': ['React', 'Node.js', 'SQL', 'DSA'],
+    BBA: ['Excel', 'Business Analysis', 'Communication'],
+    MBA: ['Excel', 'Power BI', 'Strategy']
+  };
+
+  availableSkills: string[] = [];
+
+  close(): void {
+    this.isOpen = false;
+  }
+
+  updateSkills(): void {
+    this.availableSkills = this.skillsByQualification[this.form.qualification] ?? [];
+    this.form.skills = [];
+  }
+
+  onWorkModeChange(): void {
+    if (this.form.workMode === 'remote') {
+      this.form.location = '';
     }
-  ];
+  }
 
-  matches: Internship[] = this.internships;
-  resultNote = 'Filter by role, location, or mode to see matching internships.';
-
-  find(): void {
-    if (!this.authState.isLoggedIn()) {
-      this.authModal.showLogin();
+  toggleSkill(event: Event, skill: string): void {
+    const input = event.target as HTMLInputElement | null;
+    if (!input) {
       return;
     }
 
-    const keyword = this.filters.keyword.toLowerCase();
-    const location = this.filters.location.toLowerCase();
-    const type = this.filters.type;
-
-    this.matches = this.internships.filter((internship) => {
-      const keywordMatch =
-        !keyword ||
-        internship.title.toLowerCase().includes(keyword) ||
-        internship.focus.some((tag) => tag.toLowerCase().includes(keyword));
-
-      const locationMatch = !location || internship.location.toLowerCase().includes(location);
-      const typeMatch = type === 'any' || internship.type === type;
-
-      return keywordMatch && locationMatch && typeMatch;
-    });
-
-    if (this.matches.length === 0) {
-      this.resultNote = 'No matches yet. Try a broader keyword like "frontend" or "python".';
+    if (input.checked) {
+      if (!this.form.skills.includes(skill)) {
+        this.form.skills = [...this.form.skills, skill];
+      }
     } else {
-      this.resultNote = `Showing ${this.matches.length} internships`;
+      this.form.skills = this.form.skills.filter(item => item !== skill);
+    }
+  }
+
+  addManualSkill(): void {
+    const skill = this.manualSkill.trim();
+    if (!skill) {
+      return;
+    }
+
+    if (!this.availableSkills.includes(skill)) {
+      this.availableSkills = [...this.availableSkills, skill];
+    }
+
+    if (!this.form.skills.includes(skill)) {
+      this.form.skills = [...this.form.skills, skill];
+    }
+
+    this.manualSkill = '';
+  }
+
+  resetForm(): void {
+    this.form = { role: '', workMode: '', location: '', qualification: '', skills: [] };
+    this.availableSkills = [];
+    this.manualSkill = '';
+  }
+
+  submitForm(): void {
+    if (this.form.workMode && this.form.qualification && (this.form.workMode === 'remote' || this.form.location)) {
+      this.isLoading = true;
+      this.internshipService.recommendInternships(this.form).subscribe({
+        next: (response) => {
+          this.isLoading = false;
+          if (response.success) {
+            console.log('Internships found:', response.data);
+            alert('Internship recommendations fetched successfully! check console for data');
+            // TODO: Navigate to a results page or show results in a modal
+            this.close();
+          } else {
+            alert('No internships found matching your criteria.');
+          }
+        },
+        error: (err) => {
+          this.isLoading = false;
+          console.error(err);
+          alert('Failed to fetch recommendations. Please try again.');
+        }
+      });
+    } else {
+      alert('Please choose work mode and qualification. Location is required only for offline.');
     }
   }
 }

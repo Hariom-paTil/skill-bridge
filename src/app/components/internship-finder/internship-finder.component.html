@@ -1,65 +1,78 @@
-<section class="tool-panel">
-	<header class="tool-header">
-		<div>
-			<p class="eyebrow">Opportunities</p>
-			<h2>Internship Finder</h2>
-			<p class="lede">Search internships by role, location, and work mode with quick filters.</p>
-		</div>
-		<img [src]="imageSrc" alt="Internship Finder" class="tool-visual" />
+<div class="modal-backdrop" *ngIf="isOpen" (click)="close()"></div>
+
+<div class="modal-card" *ngIf="isOpen">
+	<header class="modal-header">
+		<h2>Find top internships for you</h2>
+		<button class="close-btn" (click)="close()">×</button>
 	</header>
 
-	<div class="input-grid">
-		<label class="field">
-			<span class="field-label">Keyword or skill</span>
-			<input
-				name="keyword"
-				[(ngModel)]="filters.keyword"
-				placeholder="e.g. angular, data, backend"
-			/>
-		</label>
-
-		<label class="field">
-			<span class="field-label">Location</span>
-			<input
-				name="location"
-				[(ngModel)]="filters.location"
-				placeholder="City or remote"
-			/>
-		</label>
-
-		<label class="field">
-			<span class="field-label">Mode</span>
-			<select name="type" [(ngModel)]="filters.type">
-				<option value="any">Any</option>
-				<option value="remote">Remote</option>
-				<option value="onsite">Onsite</option>
-				<option value="hybrid">Hybrid</option>
+	<div class="form-card">
+		<label>
+			Internship Role (optional)
+			<select [(ngModel)]="form.role">
+				<option value="">Select role</option>
+				<option *ngFor="let role of roles" [value]="role">{{ role }}</option>
 			</select>
 		</label>
 
-		<button type="button" class="primary" (click)="find()">Find matches</button>
+		<div class="radio-group">
+			<p>Work Mode</p>
+			<div class="work-mode-options">
+				<label class="radio-card" [class.active]="form.workMode === 'remote'">
+					<input type="radio" name="workMode" value="remote" [(ngModel)]="form.workMode"
+						(change)="onWorkModeChange()" />
+					<span class="mode-icon">🏠</span>
+					<span class="mode-label">Remote</span>
+				</label>
+				<label class="radio-card" [class.active]="form.workMode === 'offline'">
+					<input type="radio" name="workMode" value="offline" [(ngModel)]="form.workMode"
+						(change)="onWorkModeChange()" />
+					<span class="mode-icon">🏢</span>
+					<span class="mode-label">Offline</span>
+				</label>
+			</div>
+		</div>
+
+		<label *ngIf="form.workMode === 'offline'" class="fade-in">
+			Location
+			<select [(ngModel)]="form.location">
+				<option value="">Select location</option>
+				<option *ngFor="let loc of locations" [value]="loc">{{ loc }}</option>
+			</select>
+		</label>
+
+		<label>
+			Qualification
+			<select [(ngModel)]="form.qualification" (change)="updateSkills()">
+				<option value="">Select qualification</option>
+				<option *ngFor="let qual of qualifications" [value]="qual">{{ qual }}</option>
+			</select>
+		</label>
+
+		<div *ngIf="availableSkills.length > 0" class="skills-section">
+			<p>Recommended Skills</p>
+			<div class="skills-grid">
+				<label *ngFor="let skill of availableSkills" class="skill-chip"
+					[class.selected]="form.skills.includes(skill)">
+					<input type="checkbox" [value]="skill" (change)="toggleSkill($event, skill)"
+						[checked]="form.skills.includes(skill)" />
+					<span class="checkmark">✓</span>
+					{{ skill }}
+				</label>
+			</div>
+		</div>
+
+		<label>
+			Add Skill Manually
+			<div class="input-with-btn">
+				<input type="text" [(ngModel)]="manualSkill" placeholder="e.g., Angular, Excel" />
+				<button type="button" class="add-btn" (click)="addManualSkill()">Add</button>
+			</div>
+		</label>
+
+		<div class="form-actions">
+			<button type="button" (click)="resetForm()">Reset</button>
+			<button type="button" (click)="submitForm()">Find Internships</button>
+		</div>
 	</div>
-
-	<p class="status">{{ resultNote }}</p>
-
-	<div class="results" *ngIf="matches.length">
-		<article class="result-card" *ngFor="let internship of matches">
-			<div class="card-top">
-				<div>
-					<p class="eyebrow">{{ internship.type }}</p>
-					<h3>{{ internship.title }}</h3>
-				</div>
-				<p class="company">{{ internship.company }}</p>
-			</div>
-
-			<div class="pill-row">
-				<span class="pill" *ngFor="let tag of internship.focus">{{ tag }}</span>
-			</div>
-
-			<div class="meta">
-				<span>{{ internship.location }}</span>
-				<span>{{ internship.stipend }}</span>
-			</div>
-		</article>
-	</div>
-</section>
+</div>
