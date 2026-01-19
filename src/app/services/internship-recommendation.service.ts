@@ -4,23 +4,24 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 export interface InternshipRequest {
-  Role?: string;
-  WorkMode: string;
-  Location?: string;
-  Qualification: string;
-  Skills: string[];
+  location: string;
+  internshipMode: string;
+  qualification: string;
+  skills: string[];
 }
 
 export interface Internship {
-  id?: number;
+  internshipId?: number;
   companyName: string;
-  role: string;
-  location: string;
-  workMode: string;
-  stipend?: string;
-  duration?: string;
+  internshipRole: string;
+  companyLocation: string;
+  internshipMode: string;
+  internshipType: string;
+  stipendAmount?: number;
+  durationMonths?: number;
   applyLink?: string;
-  description?: string;
+  companyDescription?: string;
+  skillMatchScore?: number;
 }
 
 export interface InternshipResponse {
@@ -38,12 +39,13 @@ export class InternshipRecommendationService {
 
   recommendInternships(form: any): Observable<InternshipResponse> {
     const payload: InternshipRequest = {
-      Role: form.role,
-      WorkMode: form.workMode, // 'remote' or 'offline'
-      Location: form.workMode === 'offline' ? form.location : undefined,
-      Qualification: form.qualification,
-      Skills: form.skills
+      location: form.location,
+      internshipMode: form.internshipMode,
+      qualification: form.qualification,
+      skills: form.skills
     };
+
+    console.log('Sending internship recommendation request:', payload);
 
     console.log('Sending internship recommendation request:', payload);
 
@@ -58,4 +60,5 @@ export class InternshipRecommendationService {
       })
     );
   }
+  // Interface updated for API consistency
 }
