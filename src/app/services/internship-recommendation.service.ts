@@ -45,13 +45,8 @@ export class InternshipRecommendationService {
       skills: form.skills
     };
 
-    console.log('Sending internship recommendation request:', payload);
-
-    console.log('Sending internship recommendation request:', payload);
-
     return this.http.post<InternshipResponse>(this.apiUrl, payload).pipe(
       map(response => {
-        console.log('Internship API Response:', response);
         return response;
       }),
       catchError(error => {

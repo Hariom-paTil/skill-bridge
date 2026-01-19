@@ -28,15 +28,12 @@ export class TopAppsComponent implements OnInit {
       const loggedIn = this.authState.isLoggedIn();
       const user = this.authState.userDetails();
       const eduId = user?.educationId;
-      console.log('TopApps effect triggered - loggedIn:', loggedIn, 'eduId:', eduId);
 
       if (loggedIn && eduId) {
         if (this.lastLoadedEducationId !== eduId) {
-          console.log('TopApps: Loading top apps for educationId:', eduId);
           this.loadTopApps(eduId);
         }
       } else if (!loggedIn) {
-        console.log('TopApps: User logged out, clearing apps');
         this.apps = [];
         this.lastLoadedEducationId = null;
       }
@@ -66,15 +63,12 @@ export class TopAppsComponent implements OnInit {
 
   showSection(): boolean {
     const isLoggedIn = this.authState.isLoggedIn();
-    console.log('showSection called, isLoggedIn:', isLoggedIn);
     return isLoggedIn;
   }
 
   private loadTopApps(educationId: number): void {
-    console.log('TopApps: Fetching apps for educationId:', educationId);
     this.topAppsService.getTopApps(educationId).subscribe({
       next: (res: ApiTopApp[]) => {
-        console.log('TopApps: API Response received:', res);
         const iconMap: Record<string, string> = {
           'github': '🐙',
           'gitlab': '🦊',
@@ -121,7 +115,6 @@ export class TopAppsComponent implements OnInit {
         });
         this.apps = mapped;
         this.lastLoadedEducationId = educationId;
-        console.log('TopApps: Apps loaded successfully:', this.apps);
       },
       error: (err) => {
         console.error('TopApps: Failed to load top apps', err);
