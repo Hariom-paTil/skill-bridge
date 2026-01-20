@@ -1,4 +1,4 @@
-/* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files - Updated */
 
 * {
   margin: 0;
@@ -12,3 +12,19 @@ body {
   padding-top: 70px; // Space for fixed header
 }
 
+/* Calm Entry Animation */
+@keyframes calmEntry {
+  0% {
+    opacity: 0;
+    transform: translateY(15px);
+    filter: blur(4px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* Animation applied to specific elements instead of app-root to avoid fixed position issues */

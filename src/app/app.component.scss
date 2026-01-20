@@ -8,6 +8,25 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Apply a calm fade-in + blur removal to the content.
+   No movement (translate) to ensure perfect layout stability. */
+.calm-entry-content {
+  display: block;
+  animation: calmFade 0.8s ease-out forwards;
+}
+
+@keyframes calmFade {
+  0% {
+    opacity: 0;
+    filter: blur(8px);
+  }
+
+  100% {
+    opacity: 1;
+    filter: none;
+  }
+}
+
 .modal {
   position: fixed;
   inset: 0;
