@@ -1,70 +1,51 @@
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-/* Apply a calm fade-in + blur removal to the content.
-   No movement (translate) to ensure perfect layout stability. */
-.calm-entry-content {
-  display: block;
-  animation: calmFade 0.8s ease-out forwards;
-}
-
-@keyframes calmFade {
-  0% {
-    opacity: 0;
-    filter: blur(8px);
-  }
-
-  100% {
-    opacity: 1;
-    filter: none;
-  }
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .modal {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
 }
 
 .modal-backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(4, 6, 12, 0.7);
-  backdrop-filter: blur(4px);
+    position: absolute;
+    inset: 0;
+    background: rgba(4, 6, 12, 0.7);
+    backdrop-filter: blur(4px);
 }
 
 .modal-content {
-  position: relative;
-  max-width: 1200px;
-  width: 95%;
-  max-height: 90vh;
-  overflow-y: auto;
-  border-radius: 20px;
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
-  z-index: 1001;
+    position: relative;
+    max-width: 1200px;
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 20px;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+    z-index: 1001;
 }
 
 .close {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.08);
-  color: #e9edf5;
-  font-size: 22px;
-  cursor: pointer;
-  z-index: 1002;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.08);
+    color: #e9edf5;
+    font-size: 22px;
+    cursor: pointer;
+    z-index: 1002;
 }

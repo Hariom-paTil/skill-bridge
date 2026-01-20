@@ -8,10 +8,10 @@
     <nav class="nav-menu">
       <a href="#" class="nav-link active">Home</a>
       <a href="#" class="nav-link" (click)="scrollToTopApps(); $event.preventDefault()">TopAPP</a>
-      <a href="#" class="nav-link">Career Guide</a>
-      <a href="#" class="nav-link">Internships</a>
-      <a href="#" class="nav-link">Code Fixer</a>
-      <a href="#" class="nav-link">Resources</a>
+      <a href="#" class="nav-link" (click)="scrollToCareerGuide($event)">Career Guide</a>
+      <a href="#" class="nav-link" (click)="scrollToInternships($event)">Internships</a>
+      <a href="#" class="nav-link" (click)="scrollToCodeFixer($event)">Code Fixer</a>
+      <a href="#" class="nav-link" (click)="scrollToStudyRecommend($event)">Study Recommendations</a>
     </nav>
 
     @if (authState.isLoggedIn()) {

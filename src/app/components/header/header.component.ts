@@ -50,4 +50,51 @@ export class HeaderComponent implements OnInit {
       }
     }, 100);
   }
+
+  scrollToCodeFixer(event: Event) {
+    event.preventDefault();
+    const element = document.getElementById('code-fixer-card');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      element.classList.add('highlight-card');
+      setTimeout(() => {
+        element.classList.remove('highlight-card');
+      }, 3000);
+    }
+  }
+
+  scrollToInternships(event: Event) {
+    event.preventDefault();
+    const element = document.getElementById('internship-finder-card');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      element.classList.add('highlight-card');
+      setTimeout(() => {
+        element.classList.remove('highlight-card');
+      }, 3000);
+    }
+  }
+  scrollToCareerGuide(event: Event) {
+    event.preventDefault();
+    const element = document.getElementById('career-guidance-card');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      element.classList.add('highlight-card');
+      setTimeout(() => {
+        element.classList.remove('highlight-card');
+      }, 3000);
+    }
+  }
+
+  scrollToStudyRecommend(event: Event) {
+    event.preventDefault();
+    const element = document.getElementById('study-recommend-card');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      element.classList.add('highlight-card');
+      setTimeout(() => {
+        element.classList.remove('highlight-card');
+      }, 3000);
+    }
+  }
 }

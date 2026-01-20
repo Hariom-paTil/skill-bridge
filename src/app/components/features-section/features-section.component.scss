@@ -287,3 +287,26 @@
     }
   }
 }
+
+@keyframes glow-pulse {
+  0% {
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    transform: scale(1);
+  }
+
+  50% {
+    box-shadow: 0 0 20px rgba(0, 123, 255, 0.8), 0 0 10px rgba(0, 255, 255, 0.5);
+    transform: scale(1.05);
+  }
+
+  100% {
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    transform: scale(1);
+  }
+}
+
+.feature-card.highlight-card {
+  animation: glow-pulse 1.5s ease-in-out infinite;
+  border-color: #007bff;
+  z-index: 10;
+}

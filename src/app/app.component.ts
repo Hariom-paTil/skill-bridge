@@ -11,11 +11,12 @@ import { ProjectIdeasComponent } from './components/project-ideas/project-ideas.
 import { TopAppsComponent } from './components/top-apps/top-apps.component';
 import { AuthModalComponent } from './components/auth/auth-modal/auth-modal.component';
 import { CelebrationComponent } from './components/shared/celebration/celebration.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, HeroSectionComponent, FeaturesSectionComponent, CareerGuidanceComponent, StudyRecommendComponent, InternshipFinderComponent, CodeFixerComponent, ProjectIdeasComponent, TopAppsComponent, AuthModalComponent, CelebrationComponent],
+  imports: [CommonModule, HeaderComponent, HeroSectionComponent, FeaturesSectionComponent, CareerGuidanceComponent, StudyRecommendComponent, InternshipFinderComponent, CodeFixerComponent, ProjectIdeasComponent, TopAppsComponent, AuthModalComponent, CelebrationComponent, FooterComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
