@@ -14,36 +14,32 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 15px 40px;
+    padding: 20px 40px;
   }
 
   .logo {
     display: flex;
     align-items: center;
-    gap: 12px;
-    background-color: rgba(255, 255, 255, 0.95);
-    padding: 5px 15px 5px 5px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    justify-content: center;
+    background-color: transparent;
+    padding: 0;
+    box-shadow: none;
+    transition: transform 0.3s ease;
 
-    .logo-img {
-      width: 50px;
-      height: 50px;
-      object-fit: contain;
-      background-color: #ffffff;
-      border-radius: 6px;
-      padding: 3px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      image-rendering: -webkit-optimize-contrast;
-      image-rendering: crisp-edges;
+    &:hover {
+      transform: scale(1.05);
     }
 
     .logo-text {
-      font-size: 24px;
-      font-weight: 700;
-      color: #0d2d5e;
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(to right, #ffffff, #64ffda);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
       letter-spacing: 0.5px;
-      text-shadow: none;
+      text-transform: uppercase;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
   }
 
@@ -69,7 +65,7 @@
 
       &.active {
         color: #ffffff;
-        
+
         &::after {
           content: '';
           position: absolute;
@@ -153,6 +149,7 @@
         opacity: 0;
         transform: translateY(-10px);
       }
+
       to {
         opacity: 1;
         transform: translateY(0);
