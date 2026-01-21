@@ -5,9 +5,9 @@ import { catchError, map } from 'rxjs/operators';
 
 export interface GuidanceRequest {
   name: string;
-  course: string;
-  futureGoal: string;
-  currentSkills: string;
+  currentCourse: string;
+  targetCareer: string;
+  currentSkills: string[];
   description: string;
 }
 
@@ -54,10 +54,11 @@ export class CareerGuidanceService {
   }
 
   private localSuggest(payload: GuidanceRequest): Observable<string> {
+    const skillsList = payload.currentSkills.join(', ');
     const fallbackGuidance = `Based on your profile, here's personalized career guidance:
 
 **Career Path Recommendation**
-Given your goal of "${payload.futureGoal}" and current skills in ${payload.currentSkills}, you're well-positioned for several career paths.
+Given your goal of "${payload.targetCareer}" and current skills in ${skillsList}, you're well-positioned for several career paths.
 
 **1. Skill Gaps to Address:**
 - Advanced framework knowledge
@@ -97,7 +98,7 @@ Given your goal of "${payload.futureGoal}" and current skills in ${payload.curre
 - Communities: Stack Overflow, Reddit, Discord servers
 
 Stay consistent with your learning and build projects regularly. Good luck with your career journey!`;
-    
+
     return of(fallbackGuidance);
   }
 }

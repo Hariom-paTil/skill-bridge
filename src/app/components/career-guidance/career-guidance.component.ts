@@ -55,9 +55,9 @@ export class CareerGuidanceComponent implements OnInit, OnDestroy {
 
     const payload = {
       name: this.profile.name,
-      course: this.profile.course,
-      futureGoal: this.profile.futureGoal,
-      currentSkills: this.profile.currentSkills,
+      currentCourse: this.profile.course,
+      targetCareer: this.profile.futureGoal,
+      currentSkills: this.profile.currentSkills.split(',').map(s => s.trim()).filter(s => s.length > 0),
       description: this.profile.description
     };
 
