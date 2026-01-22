@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { marked } from 'marked';
 import { AuthStateService } from '../../services/auth-state.service';
 import { AuthModalService } from '../../services/auth-modal.service';
 import { CareerGuidanceService } from '../../services/career-guidance.service';
@@ -28,7 +29,7 @@ export class CareerGuidanceComponent implements OnInit, OnDestroy {
   imageSrc = 'assets/careerlogo.png';
 
   guidanceContent = '';
-  displayedContent = '';
+  displayedContent: string | Promise<string> = '';
   statusText = '';
   loading = false;
   errorMessage = '';
@@ -76,44 +77,55 @@ export class CareerGuidanceComponent implements OnInit, OnDestroy {
     });
   }
 
-  startTypingAnimation(): void {
-    this.displayedContent = '';
+  async startTypingAnimation(): Promise<void> {
     this.isTyping = true;
     let index = 0;
-    const speed = 20; // milliseconds per character
+    const speed = 10;
 
-    this.typingInterval = setInterval(() => {
+    if (this.typingInterval) clearInterval(this.typingInterval);
+
+    this.typingInterval = setInterval(async () => {
+      // Chunk size increases speed
       if (index < this.guidanceContent.length) {
-        this.displayedContent += this.guidanceContent[index];
-        index++;
+        index += 3;
+        if (index > this.guidanceContent.length) index = this.guidanceContent.length;
+
+        const currentMarkdown = this.guidanceContent.substring(0, index);
+        try {
+          const parsed = marked.parse(currentMarkdown);
+          this.displayedContent = parsed instanceof Promise ? await parsed : parsed;
+        } catch (e) {
+          this.displayedContent = currentMarkdown;
+        }
       } else {
-        this.isTyping = false;
-        clearInterval(this.typingInterval);
+        this.finishTyping();
       }
     }, speed);
   }
 
-  skipTyping(): void {
+  async skipTyping(): Promise<void> {
     if (this.isTyping) {
+      this.finishTyping();
+      const parsed = marked.parse(this.guidanceContent);
+      this.displayedContent = parsed instanceof Promise ? await parsed : parsed;
+    }
+  }
+
+  finishTyping(): void {
+    this.isTyping = false;
+    if (this.typingInterval) {
       clearInterval(this.typingInterval);
-      this.displayedContent = this.guidanceContent;
-      this.isTyping = false;
     }
   }
 
   closeModal(): void {
     this.showResultsModal = false;
-    if (this.typingInterval) {
-      clearInterval(this.typingInterval);
-    }
+    this.finishTyping();
     this.displayedContent = '';
     this.guidanceContent = '';
-    this.isTyping = false;
   }
 
   ngOnDestroy(): void {
-    if (this.typingInterval) {
-      clearInterval(this.typingInterval);
-    }
+    this.finishTyping();
   }
 }

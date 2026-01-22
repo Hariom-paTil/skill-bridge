@@ -11,65 +11,41 @@
 	<form class="input-grid" (ngSubmit)="generateGuidance()">
 		<label class="field">
 			<span class="field-label">Name</span>
-			<input
-				name="name"
-				[(ngModel)]="profile.name"
-				type="text"
-				placeholder="Your name"
-				disabled
-			/>
+			<input name="name" [(ngModel)]="profile.name" type="text" placeholder="Your name" disabled />
 		</label>
 
 		<label class="field">
 			<span class="field-label">Course</span>
-			<input
-				name="course"
-				[(ngModel)]="profile.course"
-				type="text"
-				placeholder="Your course"
-				disabled
-			/>
+			<input name="course" [(ngModel)]="profile.course" type="text" placeholder="Your course" disabled />
 		</label>
 
 		<label class="field">
 			<span class="field-label">Future Goal</span>
-			<input
-				name="futureGoal"
-				[(ngModel)]="profile.futureGoal"
-				type="text"
-				placeholder="e.g. Backend Engineer, Data Analyst"
-			/>
+			<input name="futureGoal" [(ngModel)]="profile.futureGoal" type="text"
+				placeholder="e.g. Backend Engineer, Data Analyst" />
 		</label>
 
 		<label class="field wide">
 			<span class="field-label">Current Skills</span>
-			<textarea
-				name="currentSkills"
-				[(ngModel)]="profile.currentSkills"
-				rows="3"
-				placeholder="e.g. SQL, TypeScript, problem solving"
-			></textarea>
+			<textarea name="currentSkills" [(ngModel)]="profile.currentSkills" rows="3"
+				placeholder="e.g. SQL, TypeScript, problem solving"></textarea>
 		</label>
 
 		<label class="field wide">
 			<span class="field-label">Description</span>
-			<textarea
-				name="description"
-				[(ngModel)]="profile.description"
-				rows="3"
-				placeholder="Briefly describe your interests or experience"
-			></textarea>
+			<textarea name="description" [(ngModel)]="profile.description" rows="3"
+				placeholder="Briefly describe your interests or experience"></textarea>
 		</label>
 
 		<button type="submit" class="primary">Generate guidance</button>
 	</form>
 
-		<!-- Loading and error messages -->
-		<div class="status" *ngIf="loading">Generating personalized guidance…</div>
-		<div class="status" *ngIf="!loading && errorMessage">{{ errorMessage }}</div>
+	<!-- Loading and error messages -->
+	<div class="status" *ngIf="loading">Generating personalized guidance…</div>
+	<div class="status" *ngIf="!loading && errorMessage">{{ errorMessage }}</div>
 
-		<!-- Results Modal -->
-		<div class="results-modal" *ngIf="showResultsModal">
+	<!-- Results Modal -->
+	<div class="results-modal" *ngIf="showResultsModal">
 		<div class="modal-backdrop" (click)="closeModal()"></div>
 		<div class="modal-content">
 			<button class="modal-close" (click)="closeModal()">×</button>
@@ -79,11 +55,7 @@
 			</header>
 			<section class="modal-body">
 				<div class="guidance-display" (click)="skipTyping()">
-					<div class="guidance-content" [innerText]="displayedContent"></div>
-					<span class="typing-cursor" *ngIf="isTyping">▋</span>
-				</div>
-				<div class="skip-hint" *ngIf="isTyping">
-					<small>Click anywhere to skip animation</small>
+					<div class="guidance-content" [innerHTML]="displayedContent"></div>
 				</div>
 			</section>
 		</div>
