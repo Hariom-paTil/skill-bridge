@@ -25,9 +25,44 @@ export class ProjectIdeasComponent {
   private authModal = inject(AuthModalService);
 
   filters = {
-    domain: 'web',
-    level: 'beginner'
+    level: 'beginner',
+    techStack: '',
+    category: 'web',
+    purpose: 'learning',
+    features: [] as string[]
   };
+
+  categories = [
+    { value: 'web', label: 'Web Application' },
+    { value: 'mobile', label: 'Mobile App' },
+    { value: 'backend', label: 'Backend API' },
+    { value: 'ai', label: 'AI / ML' },
+    { value: 'automation', label: 'Automation Tool' },
+    { value: 'management', label: 'Management System' },
+    { value: 'ecommerce', label: 'E-commerce' },
+    { value: 'education', label: 'Education' },
+    { value: 'healthcare', label: 'Healthcare' },
+    { value: 'finance', label: 'Finance' }
+  ];
+
+  purposes = [
+    'Learning / Practice',
+    'College Project',
+    'Portfolio Project',
+    'Startup / Business Idea',
+    'Interview Preparation'
+  ];
+
+  featureOptions = [
+    'Authentication & Authorization',
+    'Admin Panel',
+    'CRUD Operations',
+    'Role-based Access',
+    'API Integration',
+    'Payments',
+    'Notifications',
+    'Reports & Dashboard'
+  ];
 
   projectIdeas: ProjectIdea[] = [
     {
@@ -83,6 +118,15 @@ export class ProjectIdeasComponent {
   ideas: ProjectIdea[] = [];
   statusText = 'Choose your domain and level to get personalized project ideas.';
 
+  toggleFeature(feature: string): void {
+    const index = this.filters.features.indexOf(feature);
+    if (index >= 0) {
+      this.filters.features.splice(index, 1);
+    } else {
+      this.filters.features.push(feature);
+    }
+  }
+
   generate(): void {
     if (!this.authState.isLoggedIn()) {
       this.authModal.showLogin();
@@ -91,6 +135,10 @@ export class ProjectIdeasComponent {
 
     const filtered = this.projectIdeas.filter(idea => idea.difficulty === this.filters.level);
     this.ideas = filtered.length ? filtered : this.projectIdeas.slice(0, 3);
+
+    // In a real app, we would send this.filters to backend
+    console.log('Generating ideas with filters:', this.filters);
+
     this.statusText = `Showing ${this.ideas.length} project ideas for ${this.filters.level} level`;
   }
 }

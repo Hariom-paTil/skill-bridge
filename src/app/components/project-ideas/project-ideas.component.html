@@ -1,43 +1,74 @@
 <section class="tool-panel">
-  <header class="tool-header">
-    <div>
-      <p class="eyebrow">Innovation</p>
-      <h2>Project Ideas Generator</h2>
-      <p class="lede">Get personalized project ideas based on your skill level and interests.</p>
+  <div class="panel-content">
+    <div class="left-col">
+      <header class="tool-head">
+        <p class="eyebrow">Innovation engine</p>
+        <h2>Project Ideas Generator</h2>
+        <p class="lede">Generate smart, real-world project ideas based on your skills, tech stack, and future career
+          goals.</p>
+      </header>
+
+      <div class="input-section">
+        <label class="field-compact">
+          <span>Skill Level</span>
+          <select name="level" [(ngModel)]="filters.level">
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+          </select>
+        </label>
+
+        <label class="field-compact">
+          <span>Technology Stack</span>
+          <input type="text" name="techStack" [(ngModel)]="filters.techStack" placeholder="e.g. Angular, Node.js"
+            class="text-input">
+        </label>
+
+        <label class="field-compact">
+          <span>Project Category</span>
+          <select name="category" [(ngModel)]="filters.category">
+            <option *ngFor="let cat of categories" [value]="cat.value">{{ cat.label }}</option>
+          </select>
+        </label>
+
+        <label class="field-compact">
+          <span>Purpose</span>
+          <select name="purpose" [(ngModel)]="filters.purpose">
+            <option *ngFor="let p of purposes" [value]="p">{{ p }}</option>
+          </select>
+        </label>
+
+        <div class="field-full">
+          <span>Features Preference</span>
+          <div class="features-grid">
+            <div *ngFor="let feature of featureOptions" class="checkbox-option">
+              <label>
+                <input type="checkbox" [checked]="filters.features.includes(feature)" (change)="toggleFeature(feature)">
+                {{ feature }}
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="primary-btn" (click)="generate()">
+          <span>Generate Ideas</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </button>
+      </div>
+
+      <p class="status" *ngIf="statusText">{{ statusText }}</p>
     </div>
-    <div class="header-icon">
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+
+    <div class="right-col">
+      <div class="image-wrapper">
+        <img src="assets/Ai.png" alt="AI Project Generator" class="hero-img" />
+        <div class="glow-effect"></div>
+      </div>
     </div>
-  </header>
-
-  <div class="input-grid">
-    <label class="field">
-      <span class="field-label">Domain</span>
-      <select name="domain" [(ngModel)]="filters.domain">
-        <option value="web">Web Development</option>
-        <option value="mobile">Mobile Apps</option>
-        <option value="data">Data Science</option>
-        <option value="ai">AI/ML</option>
-      </select>
-    </label>
-
-    <label class="field">
-      <span class="field-label">Skill Level</span>
-      <select name="level" [(ngModel)]="filters.level">
-        <option value="beginner">Beginner</option>
-        <option value="intermediate">Intermediate</option>
-        <option value="advanced">Advanced</option>
-      </select>
-    </label>
-
-    <button type="button" class="primary" (click)="generate()">Generate ideas</button>
   </div>
-
-  <p class="status">{{ statusText }}</p>
 
   <div class="results" *ngIf="ideas.length">
     <article class="result-card" *ngFor="let idea of ideas">
