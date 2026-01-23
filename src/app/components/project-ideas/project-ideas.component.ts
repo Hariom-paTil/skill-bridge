@@ -4,14 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { AuthStateService } from '../../services/auth-state.service';
 import { AuthModalService } from '../../services/auth-modal.service';
 
-interface ProjectIdea {
-  title: string;
-  description: string;
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
-  skills: string[];
-  features: string[];
-  timeEstimate: string;
-}
+import { ProjectIdeasService } from '../../services/project-ideas.service';
+import { ProjectIdea, ProjectIdeasRequest } from '../../models/project-idea.model';
+
 
 @Component({
   selector: 'app-project-ideas',
@@ -23,6 +18,7 @@ interface ProjectIdea {
 export class ProjectIdeasComponent {
   private authState = inject(AuthStateService);
   private authModal = inject(AuthModalService);
+  private projectService = inject(ProjectIdeasService);
 
   filters = {
     level: 'beginner',
@@ -133,12 +129,30 @@ export class ProjectIdeasComponent {
       return;
     }
 
-    const filtered = this.projectIdeas.filter(idea => idea.difficulty === this.filters.level);
-    this.ideas = filtered.length ? filtered : this.projectIdeas.slice(0, 3);
+    this.statusText = 'Generating project ideas...';
 
-    // In a real app, we would send this.filters to backend
-    console.log('Generating ideas with filters:', this.filters);
+    const request: ProjectIdeasRequest = {
+      level: this.filters.level,
+      techStack: this.filters.techStack.split(',').map(s => s.trim()).filter(s => s),
+      category: this.filters.category,
+      purpose: this.filters.purpose,
+      features: this.filters.features
+    };
 
-    this.statusText = `Showing ${this.ideas.length} project ideas for ${this.filters.level} level`;
+    // console.log('Sending request:', request);
+
+    this.projectService.generateIdeas(request).subscribe({
+      next: (ideas) => {
+        this.ideas = ideas;
+        this.statusText = `Showing ${this.ideas.length} project ideas for ${this.filters.level} level`;
+      },
+      error: (error) => {
+        console.error('API Error:', error);
+        // Fallback to local data if API fails
+        const filtered = this.projectIdeas.filter(idea => idea.difficulty === this.filters.level);
+        this.ideas = filtered.length ? filtered : this.projectIdeas.slice(0, 3);
+        this.statusText = `Showing ${this.ideas.length} project ideas (Offline Mode)`;
+      }
+    });
   }
 }

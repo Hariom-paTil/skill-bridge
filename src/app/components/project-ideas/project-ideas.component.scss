@@ -112,26 +112,40 @@
   select,
   .text-input {
     width: 100%;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(122, 162, 255, 0.2);
-    color: #e9edf5;
+    padding: 14px 16px;
     border-radius: 12px;
-    padding: 0 16px;
-    /* Adjusted padding */
+    border: 1px solid rgba(122, 162, 255, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+    color: #e9edf5;
     font-size: 15px;
-    /* Increased */
-    height: 52px;
-    /* Increased height */
     transition: all 0.2s ease;
-
-    &:focus {
-      border-color: #7aa2ff;
-      background: rgba(255, 255, 255, 0.08);
-      outline: none;
-    }
+    font-family: inherit;
+    height: 52px;
 
     &::placeholder {
-      color: rgba(183, 196, 222, 0.5);
+      color: rgba(233, 237, 245, 0.3);
+    }
+
+    &:hover {
+      border-color: rgba(122, 162, 255, 0.4);
+    }
+
+    &:focus {
+      outline: none;
+      border-color: #7aa2ff;
+      box-shadow: 0 0 0 4px rgba(122, 162, 255, 0.1);
+      background: rgba(12, 18, 34, 0.8);
+    }
+
+    &:disabled {
+      opacity: 0.7;
+      background: rgba(12, 18, 34, 0.3);
+      cursor: not-allowed;
+    }
+
+    option {
+      background: #0b1220;
+      color: #e9edf5;
     }
   }
 }
