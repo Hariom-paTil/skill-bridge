@@ -87,9 +87,9 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  scrollToStudyRecommend(event: Event) {
+  scrollToSkillGapAnalyzer(event: Event) {
     event.preventDefault();
-    const element = document.getElementById('study-recommend-card');
+    const element = document.getElementById('skill-gap-analyzer-card');
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'center' });
       element.classList.add('highlight-card');

@@ -17,31 +17,35 @@
     </ng-container>
 
     <!-- Logged in content -->
+    <!-- Logged in content -->
     <ng-template #loggedIn>
-      <ng-container *ngIf="apps.length; else loading">
-        <div class="marquee" [class.paused]="selectedApp">
-          <div class="marquee-track">
-            <button
-              class="app-card"
-              *ngFor="let app of doubledApps; trackBy: trackByName"
-              type="button"
-              (click)="selectApp(app)"
-              [attr.aria-label]="'Open details for ' + app.name"
-            >
-              <span class="app-icon" [style.background]="app.tint">{{ app.icon }}</span>
-              <span class="app-name">{{ app.name }}</span>
-            </button>
-          </div>
-          <div class="edge fade-left"></div>
-          <div class="edge fade-right"></div>
-        </div>
-      </ng-container>
-      <ng-template #loading>
+      <ng-container *ngIf="isLoading">
         <div class="loading">
           <div class="spinner"></div>
           <p>Fetching your personalized apps...</p>
         </div>
-      </ng-template>
+      </ng-container>
+
+      <ng-container *ngIf="!isLoading">
+        <ng-container *ngIf="apps.length; else noApps">
+          <div class="marquee" [class.paused]="selectedApp">
+            <div class="marquee-track">
+              <button class="app-card" *ngFor="let app of doubledApps; trackBy: trackByName" type="button"
+                (click)="selectApp(app)" [attr.aria-label]="'Open details for ' + app.name">
+                <span class="app-icon" [style.background]="app.tint">{{ app.icon }}</span>
+                <span class="app-name">{{ app.name }}</span>
+              </button>
+            </div>
+            <div class="edge fade-left"></div>
+            <div class="edge fade-right"></div>
+          </div>
+        </ng-container>
+        <ng-template #noApps>
+          <div class="empty-state">
+            <p>No personalized apps found for your course.</p>
+          </div>
+        </ng-template>
+      </ng-container>
     </ng-template>
   </div>
 

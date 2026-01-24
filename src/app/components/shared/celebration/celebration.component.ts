@@ -8,9 +8,10 @@ import { CelebrationService } from '../../../services/celebration.service';
   imports: [CommonModule],
   template: `
     <div class="celebration-overlay" *ngIf="celebration.showCelebration()">
-      <div class="lightning-effect"></div>
+      <div class="lightning-container">
+          <div class="lightning-flash"></div>
+      </div>
       <div class="welcome-box">
-        <div class="sparkle"></div>
         <h1>Welcome to Skill Bridge!</h1>
         <p>Hello {{ celebration.userName() }}!</p>
         <div class="success-icon">✓</div>

@@ -21,6 +21,7 @@ interface TopApp {
 export class TopAppsComponent implements OnInit {
   apps: TopApp[] = [];
   selectedApp: TopApp | null = null;
+  isLoading = false;
   private lastLoadedEducationId: number | null = null;
 
   constructor(private topAppsService: TopAppsService, public authState: AuthStateService) {
@@ -36,6 +37,7 @@ export class TopAppsComponent implements OnInit {
       } else if (!loggedIn) {
         this.apps = [];
         this.lastLoadedEducationId = null;
+        this.isLoading = false;
       }
     });
   }
@@ -67,8 +69,23 @@ export class TopAppsComponent implements OnInit {
   }
 
   private loadTopApps(educationId: number): void {
+    this.isLoading = true;
     this.topAppsService.getTopApps(educationId).subscribe({
       next: (res: ApiTopApp[]) => {
+        let appsToMap = res;
+
+        // Fallback if no specific apps are found
+        if (!res || res.length === 0) {
+          appsToMap = [
+            { appName: 'Visual Studio Code', educationId: 0, appLink: 'https://code.visualstudio.com', appDescription: 'VS Code is a lightweight but powerful code editor defining modern development.' },
+            { appName: 'GitHub', educationId: 0, appLink: 'https://github.com', appDescription: 'GitHub is the world’s leading platform for version control and collaboration.' },
+            { appName: 'Postman', educationId: 0, appLink: 'https://www.postman.com', appDescription: 'Postman is an essential tool for building and testing APIs.' },
+            { appName: 'Docker', educationId: 0, appLink: 'https://www.docker.com', appDescription: 'Docker helps developers build, share, and run applications anywhere using containers.' },
+            { appName: 'Stack Overflow', educationId: 0, appLink: 'https://stackoverflow.com', appDescription: 'The largest, most trusted online community for developers to learn and share knowledge.' },
+            { appName: 'ChatGPT', educationId: 0, appLink: 'https://chat.openai.com', appDescription: 'AI assistant that helps debug code, write documentation, and brainstorm ideas.' }
+          ];
+        }
+
         const iconMap: Record<string, string> = {
           'github': '🐙',
           'gitlab': '🦊',
@@ -99,25 +116,31 @@ export class TopAppsComponent implements OnInit {
           'react': '⚛️',
           'node.js': '🟩',
           'spring boot': '🍃',
-          'asp.net core': '🔷'
+          'asp.net core': '🔷',
+          'stack overflow': '🥞',
+          'chatgpt': '🤖'
         };
 
-        const mapped: TopApp[] = res.map((app) => {
-          const appNameLower = app.appName.toLowerCase();
+        const mapped: TopApp[] = appsToMap.map((app) => {
+          // Safety check: ensure appName exists
+          const appName = app.appName || '';
+          const appNameLower = appName.toLowerCase();
           const icon = iconMap[appNameLower] || '⭐';
           return {
-            name: app.appName,
-            description: app.appDescription,
-            link: app.appLink,
+            name: appName || 'Unknown App',
+            description: app.appDescription || 'No description available',
+            link: app.appLink || '#',
             icon: icon,
             tint: 'linear-gradient(135deg, #0b63f6, #67c1ff)'
           };
         });
         this.apps = mapped;
         this.lastLoadedEducationId = educationId;
+        this.isLoading = false;
       },
       error: (err) => {
         console.error('TopApps: Failed to load top apps', err);
+        this.isLoading = false;
       }
     });
   }
