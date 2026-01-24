@@ -11,6 +11,8 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 export class FooterComponent {
 
   showAboutModal = false;
+  showPrivacyModal = false;
+  showTermsModal = false;
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
 
@@ -21,48 +23,61 @@ export class FooterComponent {
     }
   }
 
+  // Scroll to generic features section
   scrollToFeatures(event: Event) {
     event.preventDefault();
-    if (isPlatformBrowser(this.platformId)) {
-      const featuresSection = document.getElementById('features-section');
-      if (featuresSection) {
-        featuresSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-        // Apply glow effect
-        // We select elements that are within the features section
-        const cards = featuresSection.querySelectorAll('.feature-card, .project-ideas-card');
-
-        cards.forEach(card => {
-          card.classList.add('highlight-card');
-        });
-
-        // Remove the class after animation (approx 3s)
-        setTimeout(() => {
-          cards.forEach(card => {
-            card.classList.remove('highlight-card');
-          });
-        }, 3000);
-      }
-    }
+    this.scrollToElement('features-section', ['.feature-card', '.project-ideas-card']);
   }
 
+  // Scroll to Contact section
   scrollToContact(event: Event) {
     event.preventDefault();
+    this.scrollToElement('connect-with-us', [], 'highlight-section');
+  }
+
+  // Specific Resource Links
+  scrollToCareerRoadmap(event: Event) {
+    event.preventDefault();
+    this.scrollToElement('career-guidance-card', ['#career-guidance-card']);
+  }
+
+  scrollToInternships(event: Event) {
+    event.preventDefault();
+    this.scrollToElement('internship-finder-card', ['#internship-finder-card']);
+  }
+
+  scrollToCodeFixer(event: Event) {
+    event.preventDefault();
+    this.scrollToElement('code-fixer-card', ['#code-fixer-card']);
+  }
+
+  // Helper method for scrolling and highlighting
+  private scrollToElement(elementId: string, highlightSelectors: string[] = [], highlightClass: string = 'highlight-card') {
     if (isPlatformBrowser(this.platformId)) {
-      const contactSection = document.getElementById('connect-with-us');
-      if (contactSection) {
-        contactSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      const element = document.getElementById(elementId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-        // Add highlight class
-        contactSection.classList.add('highlight-section');
-
-        setTimeout(() => {
-          contactSection.classList.remove('highlight-section');
-        }, 4000); // 4 seconds to allow scrolling + glow
+        if (highlightSelectors.length > 0) {
+          // If selectors are provided, highlight those specifically (or the element itself if selector matches)
+          // For simple cases where we just passed the ID as a selector
+          highlightSelectors.forEach(selector => {
+            const targets = document.querySelectorAll(selector);
+            targets.forEach(target => {
+              target.classList.add(highlightClass);
+              setTimeout(() => target.classList.remove(highlightClass), 3000);
+            });
+          });
+        } else if (highlightClass === 'highlight-section') {
+          // Special case for sections
+          element.classList.add(highlightClass);
+          setTimeout(() => element.classList.remove(highlightClass), 3000);
+        }
       }
     }
   }
 
+  // Modals
   openAboutModal(event: Event) {
     event.preventDefault();
     this.showAboutModal = true;
@@ -70,6 +85,24 @@ export class FooterComponent {
 
   closeAboutModal() {
     this.showAboutModal = false;
+  }
+
+  openPrivacyModal(event: Event) {
+    event.preventDefault();
+    this.showPrivacyModal = true;
+  }
+
+  closePrivacyModal() {
+    this.showPrivacyModal = false;
+  }
+
+  openTermsModal(event: Event) {
+    event.preventDefault();
+    this.showTermsModal = true;
+  }
+
+  closeTermsModal() {
+    this.showTermsModal = false;
   }
 
   // Placeholder for other links if needed in future

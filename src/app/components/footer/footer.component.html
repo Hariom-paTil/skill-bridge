@@ -19,11 +19,11 @@
         <div class="footer-section resources">
             <h3>Resources</h3>
             <ul>
-                <li><a href="#">Career Guide</a></li>
-                <li><a href="#">Internships</a></li>
-                <li><a href="#">Code Fixer</a></li>
-                <li><a href="#">Privacy Policy</a></li>
-                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#" (click)="scrollToCareerRoadmap($event)">Career Guide</a></li>
+                <li><a href="#" (click)="scrollToInternships($event)">Internships</a></li>
+                <li><a href="#" (click)="scrollToCodeFixer($event)">Code Fixer</a></li>
+                <li><a href="#" (click)="openPrivacyModal($event)">Privacy Policy</a></li>
+                <li><a href="#" (click)="openTermsModal($event)">Terms of Service</a></li>
             </ul>
         </div>
 
@@ -184,6 +184,80 @@
                         combining AI-driven insights with practical learning paths, Skill Bridge empowers users to move
                         forward with confidence, clarity, and purpose.</p>
                     <p class="final-statement">Skill Bridge doesn’t just show you the path—it helps you walk it.</p>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Privacy Policy Modal -->
+    <div class="modal-backdrop" *ngIf="showPrivacyModal" (click)="closePrivacyModal()"></div>
+    <div class="about-modal" *ngIf="showPrivacyModal">
+        <button class="close-btn" (click)="closePrivacyModal()">×</button>
+        <div class="modal-content-about">
+            <div class="about-header">
+                <h2>Privacy Policy</h2>
+                <p class="mission-tagline">Your privacy is important to us.</p>
+            </div>
+            <div class="scrollable-content">
+                <section>
+                    <h3>1. Information We Collect</h3>
+                    <p>We collect information you provide directly to us when you use our services, including:</p>
+                    <ul>
+                        <li>Personal account information (Name, Email, etc.)</li>
+                        <li>Usage data and preferences</li>
+                        <li>Input data for AI tools (e.g., career goals, code snippets)</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>2. How We Use Your Data</h3>
+                    <p>Your data is used solely to provide and improve the Skill Bridge services:</p>
+                    <ul>
+                        <li>To generate personalized career roadmaps and recommendations</li>
+                        <li>To improve our AI algorithms</li>
+                        <li>To communicate with you regarding your account and updates</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>3. Data Protection</h3>
+                    <p>We implement security measures to protect your personal information. We do not sell your personal
+                        data to third parties.</p>
+                </section>
+                <section class="conclusion">
+                    <p>If you have any questions about this Privacy Policy, please contact us.</p>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terms of Service Modal -->
+    <div class="modal-backdrop" *ngIf="showTermsModal" (click)="closeTermsModal()"></div>
+    <div class="about-modal" *ngIf="showTermsModal">
+        <button class="close-btn" (click)="closeTermsModal()">×</button>
+        <div class="modal-content-about">
+            <div class="about-header">
+                <h2>Terms of Service</h2>
+                <p class="mission-tagline">Rules and regulations for using Skill Bridge.</p>
+            </div>
+            <div class="scrollable-content">
+                <section>
+                    <h3>1. Acceptance of Terms</h3>
+                    <p>By accessing and using Skill Bridge, you accept and agree to be bound by the terms and provision
+                        of this agreement.</p>
+                </section>
+                <section>
+                    <h3>2. Use of License</h3>
+                    <p>Permission is granted to temporarily download one copy of the materials (information or software)
+                        on Skill Bridge's website for personal, non-commercial transitory viewing only.</p>
+                </section>
+                <section>
+                    <h3>3. Content Disclaimer</h3>
+                    <p>The materials on Skill Bridge's website are provided on an 'as is' basis. Makes no warranties,
+                        expressed or implied, and hereby disclaims and negates all other warranties including, without
+                        limitation, implied warranties or conditions of merchantability, fitness for a particular
+                        purpose, or non-infringement of intellectual property or other violation of rights.</p>
+                </section>
+                <section class="conclusion">
+                    <p>These terms are effective as of 2024.</p>
                 </section>
             </div>
         </div>
