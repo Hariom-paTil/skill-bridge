@@ -36,12 +36,29 @@ export class FooterComponent {
           card.classList.add('highlight-card');
         });
 
-        // Remove the class after animation (approx 2s)
+        // Remove the class after animation (approx 3s)
         setTimeout(() => {
           cards.forEach(card => {
             card.classList.remove('highlight-card');
           });
         }, 3000);
+      }
+    }
+  }
+
+  scrollToContact(event: Event) {
+    event.preventDefault();
+    if (isPlatformBrowser(this.platformId)) {
+      const contactSection = document.getElementById('connect-with-us');
+      if (contactSection) {
+        contactSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // Add highlight class
+        contactSection.classList.add('highlight-section');
+
+        setTimeout(() => {
+          contactSection.classList.remove('highlight-section');
+        }, 4000); // 4 seconds to allow scrolling + glow
       }
     }
   }
