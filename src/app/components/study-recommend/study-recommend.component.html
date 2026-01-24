@@ -2,10 +2,10 @@
 	<header class="tool-header">
 		<div>
 			<p class="eyebrow">Learning plan</p>
-			<h2>Study Recommendations</h2>
+			<h2>Skill Gap Analyzer</h2>
 			<p class="lede">Tell us your goals and current skills to receive personalized learning paths.</p>
 		</div>
-		<img [src]="imageSrc" alt="Study Recommendations" class="tool-visual" />
+		<img [src]="imageSrc" alt="Skill Gap Analyzer" class="tool-visual" />
 	</header>
 
 	<!-- Form Container -->
@@ -16,24 +16,16 @@
 					<span class="label-text">Targeted Skill / Role</span>
 					<span class="required-mark">*</span>
 				</span>
-				<input
-					name="targetedSkill"
-					[(ngModel)]="targetedSkill"
-					placeholder="e.g., .NET Backend Developer, Full Stack Engineer, Data Analyst"
-					required
-					[disabled]="isLoading"
-				/>
+				<input name="targetedSkill" [(ngModel)]="targetedSkill"
+					placeholder="e.g., .NET Backend Developer, Full Stack Engineer, Data Analyst" required
+					[disabled]="isLoading" />
 				<span class="field-hint">The main skill or role you want to learn</span>
 			</label>
 
 			<label class="field">
 				<span class="field-label">Skills You Already Know</span>
-				<input
-					name="knownSkills"
-					[(ngModel)]="knownSkills"
-					placeholder="e.g., Entity Framework, Repository Pattern, SQL"
-					[disabled]="isLoading"
-				/>
+				<input name="knownSkills" [(ngModel)]="knownSkills"
+					placeholder="e.g., Entity Framework, Repository Pattern, SQL" [disabled]="isLoading" />
 				<span class="field-hint">Comma-separated list of your current skills</span>
 			</label>
 		</div>
@@ -71,22 +63,13 @@
 
 		<label class="field field-full">
 			<span class="field-label">Learning Goals (Optional)</span>
-			<textarea
-				name="learningGoals"
-				[(ngModel)]="learningGoals"
+			<textarea name="learningGoals" [(ngModel)]="learningGoals"
 				placeholder="Describe what you want to achieve... e.g., 'Build scalable REST APIs with clean architecture' or 'Prepare for a .NET developer interview'"
-				rows="3"
-				[disabled]="isLoading"
-			></textarea>
+				rows="3" [disabled]="isLoading"></textarea>
 			<span class="field-hint">Help us understand your objectives better</span>
 		</label>
 
-		<button 
-			type="button" 
-			class="primary" 
-			(click)="recommend()"
-			[disabled]="isLoading"
-		>
+		<button type="button" class="primary" (click)="recommend()" [disabled]="isLoading">
 			<span class="button-icon" [class.spinner]="isLoading">{{ isLoading ? '⏳' : '🎯' }}</span>
 			{{ isLoading ? 'Generating Recommendations...' : 'Get Personalized Recommendations' }}
 		</button>
@@ -99,11 +82,8 @@
 	<div class="api-response-container" *ngIf="showApiResult && apiResponse && !error">
 		<div class="response-header">
 			<h3 class="response-title">🚀 Your Personalized Learning Path</h3>
-			<button 
-				class="reset-btn"
-				(click)="showApiResult = false; displayedContent = ''; targetedSkill = ''"
-				title="New Recommendation"
-			>
+			<button class="reset-btn" (click)="showApiResult = false; displayedContent = ''; targetedSkill = ''"
+				title="New Recommendation">
 				↻ New Recommendation
 			</button>
 		</div>
@@ -118,14 +98,10 @@
 			<!-- Learning Path Steps -->
 			<div class="learning-path-section">
 				<h3 class="path-header">📚 Learning Path</h3>
-				
+
 				<div class="steps-container">
-					<div 
-						class="step-card" 
-						*ngFor="let step of apiResponse.data.learningPath; let i = index"
-						[class.animate-in]="!isLoading"
-						[style.animation-delay]="(i * 0.1) + 's'"
-					>
+					<div class="step-card" *ngFor="let step of apiResponse.data.learningPath; let i = index"
+						[class.animate-in]="!isLoading" [style.animation-delay]="(i * 0.1) + 's'">
 						<div class="step-number">{{ step.step }}</div>
 						<div class="step-content">
 							<h4 class="step-topic">{{ step.topic }}</h4>
@@ -140,7 +116,8 @@
 
 			<!-- Typing Animation Content -->
 			<div class="typing-animation" *ngIf="isTypingAnimation && displayedContent">
-				<pre class="typing-content">{{ displayedContent }}<span class="cursor" *ngIf="displayedContent.length < 200"></span></pre>
+				<pre
+					class="typing-content">{{ displayedContent }}<span class="cursor" *ngIf="displayedContent.length < 200"></span></pre>
 			</div>
 		</div>
 	</div>
@@ -150,13 +127,9 @@
 		<div class="error-content">
 			<p class="error-icon">❌</p>
 			<p class="error-message" [style.white-space]="'pre-wrap'" [style.word-wrap]="'break-word'">{{ error }}</p>
-			<button 
-				class="retry-btn"
-				(click)="showApiResult = false; error = null"
-			>
+			<button class="retry-btn" (click)="showApiResult = false; error = null">
 				Try Again
 			</button>
 		</div>
 	</div>
 </section>
-
