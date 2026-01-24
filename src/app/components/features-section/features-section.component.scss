@@ -305,7 +305,8 @@
   }
 }
 
-.feature-card.highlight-card {
+.feature-card.highlight-card,
+.project-ideas-card.highlight-card {
   animation: glow-pulse 1.5s ease-in-out infinite;
   border-color: #007bff;
   z-index: 10;

@@ -15,6 +15,7 @@ export class HeaderComponent implements OnInit {
   authState = inject(AuthStateService);
   viewportScroller = inject(ViewportScroller);
   showProfileDropdown = false;
+  showAboutModal = false;
 
   ngOnInit() {
     this.authState.checkAuthStatus();
@@ -96,5 +97,14 @@ export class HeaderComponent implements OnInit {
         element.classList.remove('highlight-card');
       }, 3000);
     }
+  }
+
+  openAboutModal(event: Event) {
+    event.preventDefault();
+    this.showAboutModal = true;
+  }
+
+  closeAboutModal() {
+    this.showAboutModal = false;
   }
 }

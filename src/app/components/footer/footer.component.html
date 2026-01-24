@@ -9,10 +9,10 @@
         <div class="footer-section links">
             <h3>Quick Links</h3>
             <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#about">About Us</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#" (click)="scrollToTop($event)">Home</a></li>
+                <li><a href="#" (click)="scrollToFeatures($event)">Features</a></li>
+                <li><a href="#" (click)="openAboutModal($event)">About Us</a></li>
+                <li><a href="#contact" (click)="scrollToSection($event, 'contact')">Contact</a></li>
             </ul>
         </div>
 
@@ -67,5 +67,125 @@
 
     <div class="footer-bottom">
         <p>&copy; 2024 SkillBridge. All rights reserved.</p>
+    </div>
+
+    <!-- About Us Modal -->
+    <div class="modal-backdrop" *ngIf="showAboutModal" (click)="closeAboutModal()"></div>
+    <div class="about-modal" *ngIf="showAboutModal">
+        <button class="close-btn" (click)="closeAboutModal()">×</button>
+        <div class="modal-content-about">
+            <div class="about-header">
+                <h2>About Skill Bridge</h2>
+                <p class="mission-tagline">“Connect where you are today with where you want to be tomorrow.”</p>
+            </div>
+
+            <div class="scrollable-content">
+                <section class="intro-section">
+                    <p>Skill Bridge is an AI-powered career development platform designed to help students and early
+                        professionals identify the right career path, bridge skill gaps, and become industry-ready
+                        through
+                        personalized guidance. The platform combines intelligent skill analysis, career roadmapping,
+                        project recommendations, internship discovery, and code assistance—bringing everything needed
+                        for
+                        career growth into one unified ecosystem.</p>
+                </section>
+
+                <section class="vision-mission-section">
+                    <h3>Vision & Mission</h3>
+                    <div class="vm-grid">
+                        <div class="vm-card">
+                            <h4>Vision</h4>
+                            <p>To become a trusted AI career companion for every learner—guiding them from beginner to
+                                job-ready with clarity and confidence.</p>
+                        </div>
+                        <div class="vm-card">
+                            <h4>Mission</h4>
+                            <ul>
+                                <li>Provide personalized, skill-based career roadmaps</li>
+                                <li>Identify and close real-world skill gaps</li>
+                                <li>Encourage learning through projects and practice</li>
+                                <li>Support learners with internships and code-level help</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="features-breakdown">
+                    <h3>Major Sections of Skill Bridge</h3>
+
+                    <div class="feature-item">
+                        <h4>1. Full Career Roadmap (Career Guidance AI)</h4>
+                        <p><strong>Purpose:</strong> Help users discover a clear and personalized career path based on
+                            their goals and current skills.</p>
+                        <ul>
+                            <li><strong>Why it matters:</strong> Most learners waste time learning random topics. This
+                                section gives them direction and removes confusion.</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-item">
+                        <h4>2. Skill Gap Analyzer</h4>
+                        <p><strong>Purpose:</strong> Identify what the user already knows and what they still need to
+                            learn to reach their target goal.</p>
+                        <ul>
+                            <li><strong>Why it matters:</strong> Learners clearly see "what is missing" instead of
+                                guessing.</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-item">
+                        <h4>3. Internship Finder</h4>
+                        <p><strong>Purpose:</strong> Connect users with internships aligned with their skills and career
+                            goals.</p>
+                        <ul>
+                            <li><strong>Why it matters:</strong> Internships are crucial for real-world exposure, but
+                                learners often don’t know where they fit.</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-item">
+                        <h4>4. Code Error Fixer</h4>
+                        <p><strong>Purpose:</strong> Help developers debug and understand errors in their code.</p>
+                        <ul>
+                            <li><strong>Why it matters:</strong> Instead of copy-pasting fixes, learners actually
+                                understand why the error happened.</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-item">
+                        <h4>5. Project Ideas Generator</h4>
+                        <p><strong>Purpose:</strong> Encourage learning by building real-world, resume-ready projects.
+                        </p>
+                        <ul>
+                            <li><strong>Why it matters:</strong> Projects prove skills. This section helps users build
+                                what actually matters.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="top-apps-section">
+                    <h3>Top Apps Section</h3>
+                    <p>The Top Apps section showcases the <strong>best and most useful applications</strong> recommended
+                        by Skill Bridge based on educational value, usability, and career relevance.</p>
+                </section>
+
+                <section class="target-audience">
+                    <h3>Who Should Use Skill Bridge?</h3>
+                    <div class="audience-tags">
+                        <span>Students</span>
+                        <span>Beginners</span>
+                        <span>Developers</span>
+                        <span>Self-learners</span>
+                    </div>
+                </section>
+
+                <section class="conclusion">
+                    <p>Skill Bridge is more than a guidance tool—it is a complete career-building ecosystem. By
+                        combining AI-driven insights with practical learning paths, Skill Bridge empowers users to move
+                        forward with confidence, clarity, and purpose.</p>
+                    <p class="final-statement">Skill Bridge doesn’t just show you the path—it helps you walk it.</p>
+                </section>
+            </div>
+        </div>
     </div>
 </footer>
