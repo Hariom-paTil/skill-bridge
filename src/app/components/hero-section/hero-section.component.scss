@@ -108,6 +108,10 @@
       background: #ff944d;
     }
   }
+
+  &:active {
+    transform: scale(0.95);
+  }
 }
 
 /* Robot */

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-hero-section',
@@ -8,5 +8,9 @@ import { Component } from '@angular/core';
   styleUrl: './hero-section.component.scss'
 })
 export class HeroSectionComponent {
+  @Output() toolSelected = new EventEmitter<'career-guidance' | 'study-recommend' | 'internship-finder' | 'code-fixer' | 'project-ideas'>();
 
+  onSelectTool(tool: 'career-guidance' | 'study-recommend' | 'internship-finder' | 'code-fixer' | 'project-ideas') {
+    this.toolSelected.emit(tool);
+  }
 }
