@@ -1,306 +1,442 @@
-$bg-dark: #0b1220;
-$card-bg: rgba(17, 25, 40, 0.75);
-$border-color: rgba(255, 255, 255, 0.08);
-$text-primary: #ffffff;
-$text-secondary: #a5b4fc;
-$accent: #5b8cff;
+$bg-start: #0F172A;
+$bg-end: #020617;
+$primary-accent: #6366F1; // Indigo
+$secondary-accent: #22D3EE; // Cyan
+$text-heading: #F8FAFC;
+$text-secondary: #94A3B8;
+$card-bg: rgba(255, 255, 255, 0.08); // Glassmorphism
+$glass-border: rgba(255, 255, 255, 0.1);
+$shadow-xl: 0 25px 60px rgba(0, 0, 0, 0.4);
+$font-family: 'Inter', system-ui, sans-serif;
 
 :host {
 	display: block;
+	font-family: $font-family;
 }
 
+// Global Layout
 .roadmap-wrapper {
 	min-height: 100vh;
-	background: radial-gradient(circle at top right,
-			rgba(91, 140, 255, 0.15),
-			transparent 40%),
-		radial-gradient(circle at bottom left,
-			rgba(99, 102, 241, 0.12),
-			transparent 40%),
-		$bg-dark;
-
+	background: linear-gradient(to bottom, $bg-start, $bg-end);
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	padding: 2rem;
+	overflow-x: hidden;
+
+	// Subtle background grain or noise could be added here if desired, keeping it clean for now
 }
 
+// Glassmorphism Card
 .roadmap-card {
 	width: 100%;
-	max-width: 1100px;
+	max-width: 900px;
 	background: $card-bg;
-	backdrop-filter: blur(14px);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	border: 1px solid $glass-border;
 	border-radius: 20px;
-	border: 1px solid $border-color;
-	padding: 2.5rem;
-	color: $text-primary;
-	box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+	padding: 3.5rem;
+	box-shadow: $shadow-xl;
+	position: relative;
+	z-index: 10;
+
+	// High-performance rendering hints
+	transform: translate3d(0, 0, 0);
+	will-change: transform, opacity;
+
+	// Animation: Snappy smooth entrance
+	opacity: 0;
+	animation: fadeSlideUp 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
-/* Header */
+@keyframes fadeSlideUp {
+	0% {
+		opacity: 0;
+		transform: translate3d(0, 30px, 0);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
+	}
+}
+
+// Header
 .roadmap-header {
-	margin-bottom: 2rem;
+	text-align: center;
+	margin-bottom: 3rem;
 
 	h1 {
-		font-size: 2rem;
+		color: $text-heading;
+		font-size: 2.5rem;
 		font-weight: 700;
-		margin-bottom: 0.4rem;
-		color: white; // Explicitly set white as per design intent (implied by text-primary)
+		margin-bottom: 0.75rem;
+		letter-spacing: -0.02em;
+		background: linear-gradient(to right, #fff, #94a3b8);
+		background-clip: text;
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
 	}
 
 	p {
-		color: #c7d2fe;
-		font-size: 0.95rem;
+		color: $text-secondary;
+		font-size: 1.1rem;
+		line-height: 1.6;
+		max-width: 600px;
+		margin: 0 auto;
 	}
 }
 
-/* Form Grid */
+// Form Layout
 .roadmap-form {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+}
+
+.form-grid {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	gap: 1.6rem;
+	gap: 2rem;
 
 	@media (max-width: 768px) {
 		grid-template-columns: 1fr;
+		gap: 2rem;
 	}
 }
 
-/* Field */
+// Form Groups and Floating Labels
 .form-group {
+	position: relative;
 	display: flex;
 	flex-direction: column;
 
-	label {
-		font-size: 0.85rem;
-		margin-bottom: 0.4rem;
-		color: #c7d2fe;
+	&.full-width {
+		grid-column: 1 / -1;
 	}
+}
+
+.floating-label {
+	position: relative;
 
 	input,
 	textarea {
-		background: rgba(255, 255, 255, 0.04);
-		border: 1px solid $border-color;
+		width: 100%;
+		background: rgba(15, 23, 42, 0.3);
+		border: 1px solid rgba(255, 255, 255, 0.1);
 		border-radius: 12px;
-		padding: 0.8rem 1rem;
-		color: $text-primary;
-		font-size: 0.95rem;
+		padding: 1.5rem 1rem 0.5rem; // Space for label
+		color: $text-heading;
+		font-size: 1rem;
+		font-family: inherit;
 		outline: none;
-		transition: all 0.25s ease;
+		transition: all 0.3s ease;
 
-		&::placeholder {
-			color: #9ca3af;
+		&:hover:not(:disabled) {
+			border-color: rgba($primary-accent, 0.5);
 		}
 
 		&:focus {
-			border-color: $accent;
-			box-shadow: 0 0 0 2px rgba(91, 140, 255, 0.25);
+			border-color: $primary-accent;
+			background: rgba(15, 23, 42, 0.5);
+			box-shadow: 0 0 0 1px rgba($primary-accent, 0.1),
+				0 0 15px rgba($primary-accent, 0.15); // Glowing gradient border effect
 		}
 
 		&:disabled {
-			opacity: 0.6;
+			background: rgba(255, 255, 255, 0.02);
+			color: rgba($text-secondary, 0.6);
+			border-color: rgba(255, 255, 255, 0.05);
 			cursor: not-allowed;
 		}
 	}
 
 	textarea {
-		min-height: 110px;
+		min-height: 120px;
 		resize: vertical;
+		field-sizing: content; // Modern auto-resize
 	}
 
-	&.full-width {
-		grid-column: span 2;
+	label {
+		position: absolute;
+		left: 1rem;
+		top: 1rem;
+		color: $text-secondary;
+		pointer-events: none;
+		transition: all 0.2s ease;
+		font-size: 1rem;
 
-		@media (max-width: 768px) {
-			grid-column: span 1;
+		.required {
+			color: $secondary-accent;
+			margin-left: 2px;
 		}
+	}
+
+	// Floating Logic
+	// When input is focused or not showing placeholder (meaning it has value), move label up
+	input:focus+label,
+	input:not(:placeholder-shown)+label,
+	textarea:focus+label,
+	textarea:not(:placeholder-shown)+label {
+		top: 0.4rem;
+		font-size: 0.75rem;
+		color: $secondary-accent;
+		font-weight: 600;
+	}
+
+	// Fix for disabled fields showing value (e.g. Name, Course) - treat as filled
+	input:disabled[value]:not([value=""])+label {
+		top: 0.4rem;
+		font-size: 0.75rem;
 	}
 }
 
-/* Button */
-.generate-btn {
-	grid-column: span 2;
-	margin-top: 1.5rem;
-	display: flex; // Ensure proper alignment
-	flex-direction: column; // To stack button and status message if needed
+.helper-text {
+	display: block;
+	margin-top: 0.5rem;
+	font-size: 0.85rem;
+	color: rgba($text-secondary, 0.8);
+	padding-left: 0.25rem;
+}
 
-	@media (max-width: 768px) {
-		grid-column: span 1;
-	}
+// Button Styles
+.generate-btn {
+	margin-top: 1rem;
 
 	button {
+		position: relative;
 		width: 100%;
-		padding: 0.9rem;
-		border-radius: 14px;
+		height: 56px;
 		border: none;
-		cursor: pointer;
-		font-size: 1rem;
-		font-weight: 600;
+		border-radius: 12px;
+		background: linear-gradient(135deg, $primary-accent, $secondary-accent);
 		color: #fff;
-		background: linear-gradient(135deg,
-				$accent,
-				lighten($accent, 8%));
-		transition: transform 0.2s ease, box-shadow 0.2s ease;
+		font-size: 1.1rem;
+		font-weight: 700;
+		letter-spacing: 0.02em;
+		cursor: pointer;
+		overflow: hidden;
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		box-shadow: 0 10px 25px rgba($primary-accent, 0.3);
 
-		&:hover {
-			transform: translateY(-2px);
-			box-shadow: 0 15px 35px rgba(91, 140, 255, 0.45);
+		// Gradient Slide Effect on Hover
+		background-size: 200% auto;
+
+		&:hover:not(:disabled) {
+			background-position: right center;
+			transform: translateY(-3px);
+			box-shadow: 0 20px 40px rgba($primary-accent, 0.4);
+
+			// Glow and lift
+			&::after {
+				opacity: 1;
+			}
 		}
 
-		&:active {
-			transform: translateY(0);
+		&:active:not(:disabled) {
+			transform: translateY(-1px);
+			transform: scale(0.98);
+			// Ripple/Pulse effect
+			animation: ripple 0.4s linear;
 		}
+
+		&:disabled {
+			background: #1e293b;
+			color: #64748b;
+			cursor: not-allowed;
+			box-shadow: none;
+			transform: none;
+		}
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 0.75rem;
 	}
 }
 
-/* Modal styles */
+@keyframes ripple {
+	0% {
+		box-shadow: 0 0 0 0 rgba($secondary-accent, 0.4);
+	}
+
+	100% {
+		box-shadow: 0 0 0 15px rgba($secondary-accent, 0);
+	}
+}
+
+// Loader 
+.spinner-border {
+	width: 1.25rem;
+	height: 1.25rem;
+	border: 2px solid rgba(255, 255, 255, 0.3);
+	border-top-color: #fff;
+	border-radius: 50%;
+	animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+.error-msg {
+	color: #ef4444; // Red 500
+	text-align: center;
+	margin-top: 1rem;
+	font-size: 0.95rem;
+	animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+
+// --- Modal Styles (Redesigned to match) ---
 .results-modal {
 	position: fixed;
 	inset: 0;
-	display: grid;
-	place-items: center;
 	z-index: 2000;
-}
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 1.5rem;
 
-.modal-backdrop {
-	position: absolute;
-	inset: 0;
-	background: rgba(0, 0, 0, 0.5);
-	backdrop-filter: blur(2px);
-}
+	// Backdrop
+	.modal-backdrop {
+		position: absolute;
+		inset: 0;
+		background: rgba(2, 6, 23, 0.85); // Darker backdrop
+		backdrop-filter: blur(10px);
+		z-index: -1;
+	}
 
-.modal-content {
-	position: relative;
-	width: min(980px, 92vw);
-	max-height: 80vh;
-	overflow: auto;
-	background: linear-gradient(145deg, rgba(18, 26, 48, 0.98), rgba(14, 20, 36, 0.98));
-	border: 1px solid rgba(122, 162, 255, 0.35);
-	border-radius: 18px;
-	padding: 22px;
-	box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+	.modal-content {
+		width: 100%;
+		max-width: 900px;
+		max-height: 85vh;
+		background: #0F172A; // Solid dark bg for readability
+		border: 1px solid rgba($primary-accent, 0.2);
+		border-radius: 20px;
+		padding: 2.5rem;
+		box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+		position: relative;
+		overflow-y: auto;
+		color: $text-secondary;
+
+		// Scrollbar styling
+		&::-webkit-scrollbar {
+			width: 8px;
+		}
+
+		&::-webkit-scrollbar-track {
+			background: #020617;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background: #334155;
+			border-radius: 4px;
+		}
+	}
 }
 
 .modal-close {
 	position: absolute;
-	top: 12px;
-	right: 12px;
+	top: 1.5rem;
+	right: 1.5rem;
+	background: transparent;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	color: $text-secondary;
 	width: 36px;
 	height: 36px;
 	border-radius: 50%;
-	border: 1px solid rgba(122, 162, 255, 0.35);
-	background: rgba(255, 255, 255, 0.05);
-	color: #e9edf5;
-	font-size: 20px;
 	cursor: pointer;
+	font-size: 1.25rem;
+	transition: all 0.2s;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	&:hover {
+		background: rgba(255, 255, 255, 0.1);
+		color: #fff;
+	}
 }
 
 .modal-header {
-	margin-bottom: 18px;
+	margin-bottom: 2rem;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	padding-bottom: 1.5rem;
 
 	h3 {
-		margin: 0 0 4px 0;
+		color: $text-heading;
+		font-size: 1.75rem;
+		margin-bottom: 0.5rem;
 	}
 
 	.modal-sub {
-		margin: 0;
-		color: #b7c4de;
+		color: $primary-accent;
+		font-weight: 500;
 	}
 }
 
-.modal-body {
-	display: block;
-	max-height: 60vh;
-	overflow-y: auto;
-}
+// Markdown Styles
+::ng-deep .guidance-content {
 
-.guidance-display {
-	background: rgba(255, 255, 255, 0.02);
-	border: 1px solid rgba(122, 162, 255, 0.25);
-	border-radius: 14px;
-	padding: 20px;
-	cursor: pointer;
-	min-height: 200px;
-	position: relative;
-}
+	h1,
+	h2,
+	h3 {
+		color: $text-heading;
+		margin-top: 2rem;
+		margin-bottom: 1rem;
+		font-weight: 700;
+	}
 
-.guidance-content {
-	color: #e9edf5;
-	font-size: 16px;
-	line-height: 1.7;
-	word-wrap: break-word;
-	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+	h3 {
+		color: $secondary-accent;
+		font-size: 1.25rem;
+	}
 
-	::ng-deep {
+	p {
+		margin-bottom: 1.5rem;
+		line-height: 1.75;
+		font-size: 1.05rem;
+	}
 
-		h1,
-		h2,
-		h3,
-		h4 {
-			margin-top: 1.5em;
-			margin-bottom: 0.75em;
-			font-weight: 700;
-			color: #fff;
-			line-height: 1.3;
-		}
+	strong {
+		color: $primary-accent;
+	}
 
-		h3 {
-			font-size: 1.25em;
-			color: #7aa2ff;
-		}
-
-		h4 {
-			font-size: 1.1em;
-			color: #b7c4de;
-		}
-
-		p {
-			margin-bottom: 1.25em;
-		}
-
-		ul,
-		ol {
-			margin-bottom: 1.25em;
-			padding-left: 1.5em;
-		}
+	ul,
+	ol {
+		margin-bottom: 1.5rem;
+		padding-left: 1.5rem;
 
 		li {
-			margin-bottom: 0.5em;
+			margin-bottom: 0.5rem;
 
 			&::marker {
-				color: #7aa2ff;
+				color: $secondary-accent;
 			}
 		}
-
-		strong {
-			color: #7aa2ff;
-			font-weight: 600;
-		}
-
-		a {
-			color: #4f8bff;
-			text-decoration: underline;
-
-			&:hover {
-				color: #7aa2ff;
-			}
-		}
-
-		code {
-			background: rgba(255, 255, 255, 0.1);
-			padding: 2px 4px;
-			border-radius: 4px;
-			font-family: monospace;
-			font-size: 0.9em;
-		}
-	}
-}
-
-@media (max-width: 768px) {
-	.tool-panel {
-		padding: 24px;
 	}
 
-	.input-grid {
-		grid-template-columns: 1fr;
+	code {
+		background: rgba(15, 23, 42, 0.8);
+		padding: 0.2rem 0.4rem;
+		border-radius: 4px;
+		font-family: monospace;
+		color: $secondary-accent;
 	}
 }

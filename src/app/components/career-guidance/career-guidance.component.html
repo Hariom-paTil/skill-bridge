@@ -6,40 +6,63 @@
 		</header>
 
 		<form class="roadmap-form" (ngSubmit)="generateGuidance()">
-			<div class="form-group">
-				<label>Name</label>
-				<input name="name" [(ngModel)]="profile.name" type="text" placeholder="Your name" disabled />
+
+			<!-- Grid for Name and Course -->
+			<div class="form-grid">
+				<!-- Name Field -->
+				<div class="form-group floating-label">
+					<input type="text" id="name" name="name" [(ngModel)]="profile.name" placeholder=" " disabled
+						[attr.required]="true" />
+					<label for="name">Name</label>
+					<span class="helper-text">Auto-filled from your profile</span>
+				</div>
+
+				<!-- Course Field -->
+				<div class="form-group floating-label">
+					<input type="text" id="course" name="course" [(ngModel)]="profile.course" placeholder=" " disabled
+						[attr.required]="true" />
+					<label for="course">Course</label>
+					<span class="helper-text">Your current enrolled course</span>
+				</div>
 			</div>
 
-			<div class="form-group">
-				<label>Course</label>
-				<input name="course" [(ngModel)]="profile.course" type="text" placeholder="Your course" disabled />
+			<!-- Future Goal -->
+			<div class="form-group full-width floating-label">
+				<input type="text" id="futureGoal" name="futureGoal" [(ngModel)]="profile.futureGoal" placeholder=" "
+					required />
+				<label for="futureGoal">Future Goal <span class="required">*</span></label>
+				<span class="helper-text">e.g. Backend Engineer, Data Analyst, AI Researcher</span>
 			</div>
 
-			<div class="form-group">
-				<label>Future Goal</label>
-				<input name="futureGoal" [(ngModel)]="profile.futureGoal" type="text"
-					placeholder="e.g. Backend Engineer, Data Analyst" />
+			<!-- Current Skills -->
+			<div class="form-group full-width floating-label">
+				<textarea id="currentSkills" name="currentSkills" [(ngModel)]="profile.currentSkills" placeholder=" "
+					rows="1" required>
+        </textarea>
+				<label for="currentSkills">Current Skills <span class="required">*</span></label>
+				<span class="helper-text">e.g. SQL, TypeScript, problem solving, communication</span>
 			</div>
 
-			<div class="form-group full-width">
-				<label>Current Skills</label>
-				<textarea name="currentSkills" [(ngModel)]="profile.currentSkills" rows="3"
-					placeholder="e.g. SQL, TypeScript, problem solving"></textarea>
+			<!-- Description -->
+			<div class="form-group full-width floating-label">
+				<textarea id="description" name="description" [(ngModel)]="profile.description" placeholder=" " rows="1"
+					required>
+        </textarea>
+				<label for="description">Description <span class="required">*</span></label>
+				<span class="helper-text">Briefly describe your interests, passion, or experience</span>
 			</div>
 
-			<div class="form-group full-width">
-				<label>Description</label>
-				<textarea name="description" [(ngModel)]="profile.description" rows="3"
-					placeholder="Briefly describe your interests or experience"></textarea>
-			</div>
-
+			<!-- Action Area -->
 			<div class="generate-btn">
-				<button type="submit">Generate guidance</button>
-				<div *ngIf="loading" style="margin-top: 1rem; color: #a5b4fc; text-align: center;">Generating
-					personalized guidance…</div>
-				<div *ngIf="!loading && errorMessage" style="margin-top: 1rem; color: #ff6b6b; text-align: center;">{{
-					errorMessage }}</div>
+				<button type="submit"
+					[disabled]="loading || !profile.futureGoal || !profile.currentSkills || !profile.description">
+					<div *ngIf="loading" class="spinner-border"></div>
+					<span>{{ loading ? 'Generating Personalized Guidance...' : 'Generate Guidance' }}</span>
+				</button>
+
+				<div *ngIf="errorMessage" class="error-msg">
+					{{ errorMessage }}
+				</div>
 			</div>
 		</form>
 	</div>
@@ -49,11 +72,15 @@
 <div class="results-modal" *ngIf="showResultsModal">
 	<div class="modal-backdrop" (click)="closeModal()"></div>
 	<div class="modal-content">
-		<button class="modal-close" (click)="closeModal()">×</button>
+		<button class="modal-close" (click)="closeModal()">
+			<span>&times;</span>
+		</button>
+
 		<header class="modal-header">
 			<h3>Your Full Career Roadmap</h3>
-			<p class="modal-sub">AI-powered insights based on your profile</p>
+			<p class="modal-sub">AI-powered insights based on your unique profile</p>
 		</header>
+
 		<section class="modal-body">
 			<div class="guidance-display" (click)="skipTyping()">
 				<div class="guidance-content" [innerHTML]="displayedContent"></div>

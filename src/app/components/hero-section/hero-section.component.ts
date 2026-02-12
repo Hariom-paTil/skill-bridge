@@ -1,9 +1,10 @@
 import { Component, Output, EventEmitter } from '@angular/core';
+import { NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-hero-section',
   standalone: true,
-  imports: [],
+  imports: [NgOptimizedImage],
   templateUrl: './hero-section.component.html',
   styleUrl: './hero-section.component.scss'
 })
