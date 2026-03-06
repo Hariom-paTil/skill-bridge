@@ -21,6 +21,21 @@ $border-radius: 16px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.08), transparent 40%),
+		radial-gradient(circle at bottom left, rgba(139, 92, 246, 0.08), transparent 40%);
+	animation: fadeInContainer 0.6s ease-out;
+}
+
+@keyframes fadeInContainer {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 .header-section {
@@ -348,6 +363,18 @@ $border-radius: 16px;
 	position: relative;
 	overflow: hidden;
 
+	// Entrance Animation
+	animation: slideInUp 0.5s ease-out forwards;
+	opacity: 0;
+	transform: translateY(20px);
+
+	// Stagger animation delays for up to 10 cards to create a cascade effect
+	@for $i from 1 through 10 {
+		&:nth-child(#{$i}) {
+			animation-delay: #{$i * 0.1}s;
+		}
+	}
+
 	&:hover {
 		transform: translateY(-6px);
 		box-shadow: $shadow-hover;
@@ -417,6 +444,7 @@ $border-radius: 16px;
 
 			// Line clamp to 3 lines
 			display: -webkit-box;
+			line-clamp: 3;
 			-webkit-line-clamp: 3;
 			-webkit-box-orient: vertical;
 			overflow: hidden;
@@ -453,5 +481,18 @@ $border-radius: 16px;
 				transform: translateX(4px);
 			}
 		}
+	}
+}
+
+// Entrance Keyframes
+@keyframes slideInUp {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
 	}
 }

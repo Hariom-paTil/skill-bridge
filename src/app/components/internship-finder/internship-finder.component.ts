@@ -23,6 +23,7 @@ export class InternshipFinderComponent {
 
   formData = {
     username: '',
+    email: '',
     role: '',
     internshipMode: 'offline', // Default to offline
     location: '',
@@ -33,6 +34,7 @@ export class InternshipFinderComponent {
   ngOnInit() {
     // Auto-fill username if logged in
     this.formData.username = this.authState.userName();
+    this.formData.email = this.authState.userDetails()?.email || '';
   }
 
   // NOTE: openModal and closeModal are removed as this component is now displayed directly by the parent modal.
