@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Internship, InternshipRecommendationService, InternshipResponse } from '../../services/internship-recommendation.service';
+import { Internship, InternshipRecommendationService } from '../../services/internship-recommendation.service';
 import { AuthStateService } from '../../services/auth-state.service';
 
 @Component({
@@ -44,20 +44,21 @@ export class InternshipFinderComponent {
     this.showResults = false;
 
     const payload = {
-      location: this.formData.internshipMode === 'remote' ? 'null' : this.formData.location,
+      location: this.formData.location,
       internshipMode: this.formData.internshipMode,
       qualification: this.formData.qualification,
-      skills: this.formData.skills.split(',').map(s => s.trim())
+      skills: this.formData.skills
     };
 
     this.internshipService.recommendInternships(payload).subscribe({
-      next: (res) => {
+      next: (res: Internship[]) => {
         this.loading = false;
-        if (res.success) {
-          this.internships = res.data;
+        if (res && res.length > 0) {
+          this.internships = res;
           this.showResults = true;
         } else {
-          this.error = res.message || 'No internships found.';
+          this.internships = [];
+          this.showResults = true; // Show empty state correctly
         }
       },
       error: (err) => {

@@ -1,163 +1,128 @@
-<div class="internship-card-content">
-    <div class="modal-header">
-        <div>
-            <h3>Internship Finder</h3>
-        </div>
+<div class="internship-finder-container">
+
+    <div class="header-section text-center">
+        <h2>AI Internship Matcher</h2>
+        <p>Find the best opportunities tailored to your skills and qualifications.</p>
     </div>
 
-    <div class="form-card">
-        <label>
-            Username
-            <input type="text" [(ngModel)]="formData.username" name="username" readonly disabled>
-        </label>
+    <!-- Form Card -->
+    <div class="form-card" *ngIf="!loading && !showResults">
+        <form (ngSubmit)="onSubmit()" #internForm="ngForm">
 
-        <label>
-            Internship Role
-            <select [(ngModel)]="formData.role" name="role">
-                <option value="" disabled selected>Select Role</option>
-                <option value="Frontend Developer">Frontend Developer</option>
-                <option value="Backend Developer">Backend Developer</option>
-                <option value="Full Stack Developer">Full Stack Developer</option>
-                <option value="Data Scientist">Data Scientist</option>
-                <option value="UI/UX Designer">UI/UX Designer</option>
-                <option value="AI/ML Engineer">AI/ML Engineer</option>
-            </select>
-        </label>
-
-        <div class="radio-group">
-            <p>Internship Type:</p>
-            <div class="radio-options">
-                <label class="custom-radio" [class.selected]="formData.internshipMode === 'remote'">
-                    <input type="radio" [(ngModel)]="formData.internshipMode" name="internshipMode" value="remote">
-                    <span class="radio-label">
-                        <i class="icon-remote">🏠</i> Remote
-                    </span>
-                </label>
-                <label class="custom-radio" [class.selected]="formData.internshipMode === 'offline'">
-                    <input type="radio" [(ngModel)]="formData.internshipMode" name="internshipMode" value="offline">
-                    <span class="radio-label">
-                        <i class="icon-offline">🏢</i> Offline
-                    </span>
-                </label>
-            </div>
-        </div>
-
-        <!-- Conditional Location Field -->
-        <label *ngIf="formData.internshipMode === 'offline'">
-            Location
-            <input type="text" [(ngModel)]="formData.location" name="location" placeholder="e.g. Pune, Bangalore">
-        </label>
-
-        <label>
-            Qualification
-            <select [(ngModel)]="formData.qualification" name="qualification">
-                <option value="" disabled selected>Select Qualification</option>
-                <option value="MCA">MCA</option>
-                <option value="BCA">BCA</option>
-                <option value="B.Tech">B.Tech</option>
-                <option value="M.Tech">M.Tech</option>
-                <option value="B.Sc">B.Sc CS/IT</option>
-                <option value="M.Sc">M.Sc CS/IT</option>
-            </select>
-        </label>
-
-        <label>
-            Skills (comma separated)
-            <input type="text" [(ngModel)]="formData.skills" name="skills" placeholder="e.g. Java, Python, Angular">
-        </label>
-
-        <!-- Error Message -->
-        <div *ngIf="error" class="error-message">
-            {{ error }}
-        </div>
-
-        <div class="form-actions">
-
-            <button (click)="onSubmit()" [disabled]="loading">
-                {{ loading ? 'Searching...' : 'Search' }}
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- Separate Results Modal -->
-<div class="results-modal-backdrop" *ngIf="showResults" (click)="closeResults()">
-    <div class="results-modal" (click)="$event.stopPropagation()">
-        <div class="results-modal-header">
-            <div>
-                <h3>🎯 Found {{ internships.length }} Perfect Match{{ internships.length > 1 ? 'es' : '' }}</h3>
-                <span class="results-count">{{ internships.length }} Opportunities</span>
-            </div>
-            <button class="close-results-btn" (click)="closeResults()">&times;</button>
-        </div>
-
-        <div class="results-modal-content">
-            <div class="internship-list">
-                <div class="internship-card" *ngFor="let internship of internships; let i = index">
-                    <div class="card-badge">{{ i + 1 }}</div>
-                    
-                    <div class="card-header">
-                        <div class="title-section">
-                            <h4>{{ internship.internshipRole }}</h4>
-                            <span class="company-name">&#64; {{ internship.companyName }}</span>
-                        </div>
-                        <span class="internship-type-badge" [class.paid]="internship.internshipType === 'Paid'">
-                            {{ internship.internshipType }}
-                        </span>
-                    </div>
-
-                    <p class="description" *ngIf="internship.companyDescription">
-                        <span class="label">About:</span> {{ internship.companyDescription }}
-                    </p>
-
-                    <div class="details-grid">
-                        <div class="detail-item location">
-                            <span class="icon">📍</span>
-                            <div class="detail-content">
-                                <span class="detail-label">Location</span>
-                                <span class="detail-value">{{ internship.companyLocation }}</span>
-                            </div>
-                        </div>
-                        
-                        <div class="detail-item mode">
-                            <span class="icon">{{ internship.internshipMode === 'Remote' ? '🏠' : '🏢' }}</span>
-                            <div class="detail-content">
-                                <span class="detail-label">Mode</span>
-                                <span class="detail-value">{{ internship.internshipMode }}</span>
-                            </div>
-                        </div>
-                        
-                        <div class="detail-item stipend" *ngIf="internship.stipendAmount">
-                            <span class="icon">💰</span>
-                            <div class="detail-content">
-                                <span class="detail-label">Stipend</span>
-                                <span class="detail-value highlight">₹{{ internship.stipendAmount | number }}/month</span>
-                            </div>
-                        </div>
-                        
-                        <div class="detail-item duration" *ngIf="internship.durationMonths">
-                            <span class="icon">⏳</span>
-                            <div class="detail-content">
-                                <span class="detail-label">Duration</span>
-                                <span class="detail-value">{{ internship.durationMonths }} Months</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card-footer">
-                        <div class="footer-left">
-                            <span class="match-score" *ngIf="internship.skillMatchScore">
-                                <span class="score-icon">✨</span>
-                                {{ (internship.skillMatchScore * 100) | number:'1.0-0' }}% Match
-                            </span>
-                            <span class="internship-id">ID: #{{ internship.internshipId }}</span>
-                        </div>
-                        <a *ngIf="internship.applyLink" [href]="internship.applyLink" target="_blank" class="apply-btn">
-                            Apply Now →
-                        </a>
-                    </div>
+            <div class="form-group row-group">
+                <div class="input-half">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" [(ngModel)]="formData.username" readonly disabled>
                 </div>
             </div>
+
+            <div class="form-group">
+                <label for="skills">Key Skills <span class="required">*</span></label>
+                <input type="text" id="skills" name="skills" [(ngModel)]="formData.skills"
+                    placeholder="e.g. C#, .NET, Angular, SQL" required>
+            </div>
+
+            <div class="form-group row-group">
+                <div class="input-half">
+                    <label for="qualification">Qualification <span class="required">*</span></label>
+                    <select id="qualification" name="qualification" [(ngModel)]="formData.qualification" required>
+                        <option value="" disabled selected>Select qualification...</option>
+                        <option value="BCA">BCA</option>
+                        <option value="MCA">MCA</option>
+                        <option value="BSc IT">BSc IT</option>
+                        <option value="BE / BTech">BE / BTech</option>
+                        <option value="MTech">MTech</option>
+                    </select>
+                </div>
+
+                <div class="input-half">
+                    <label for="location">City</label>
+                    <input type="text" id="location" name="location" [(ngModel)]="formData.location"
+                        placeholder="e.g. Mumbai, Pune">
+                </div>
+            </div>
+
+            <div class="submit-section">
+                <button type="submit" class="btn-submit" [disabled]="internForm.invalid || loading">
+                    <span class="icon">✨</span> Find Internship Using AI
+                </button>
+            </div>
+        </form>
+
+        <div *ngIf="error" class="error-msg">
+            {{ error }}
         </div>
     </div>
+
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="loading">
+        <div class="ai-loader">
+            <div class="spinner"></div>
+            <div class="pulse-ring"></div>
+        </div>
+        <h3>AI is searching internships for you...</h3>
+        <p>Analyzing matching criteria...</p>
+    </div>
+
+    <!-- Results Section -->
+    <div class="results-section" *ngIf="showResults && !loading">
+
+        <div class="results-header">
+            <h3>🎯 Recommended Internships</h3>
+            <button class="btn-back" (click)="showResults = false">← Edit Search</button>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" *ngIf="internships.length === 0">
+            <div class="empty-icon">🔍</div>
+            <h4>No internships found. Try different skills.</h4>
+            <p>We couldn't find a perfect match. Adjust your city or skills to get better results.</p>
+            <button class="btn-submit outline" (click)="showResults = false">Modify Search</button>
+        </div>
+
+        <!-- Grid Layout -->
+        <div class="cards-grid" *ngIf="internships.length > 0">
+
+            <div class="internship-card" *ngFor="let internship of internships">
+
+                <div class="card-badge">
+                    🤖 AI Recommended
+                </div>
+
+                <div class="card-top">
+                    <h4 class="title">{{ $any(internship).title || $any(internship).internshipRole }}</h4>
+                    <p class="company">
+                        <span class="company-icon">🏢</span>
+                        {{ $any(internship).company || $any(internship).companyName }}
+                    </p>
+                </div>
+
+                <div class="card-meta">
+                    <span class="meta-item location">
+                        📍 {{ $any(internship).location || $any(internship).companyLocation }}
+                    </span>
+                    <span class="meta-item platform">
+                        💼 {{ $any(internship).platform || 'LinkedIn' }}
+                    </span>
+                </div>
+
+                <div class="card-body">
+                    <p class="description">
+                        {{ $any(internship).description || $any(internship).companyDescription || 'No description
+                        provided.'
+                        }}
+                    </p>
+                </div>
+
+                <div class="card-footer">
+                    <a [href]="$any(internship).link || $any(internship).applyLink" target="_blank" class="btn-apply">
+                        Apply Now <span class="arrow">→</span>
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
 </div>

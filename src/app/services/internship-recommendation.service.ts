@@ -1,33 +1,21 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 
 export interface InternshipRequest {
-  location: string;
-  internshipMode: string;
+  city: string;
   qualification: string;
-  skills: string[];
+  skills: string;
 }
 
 export interface Internship {
-  internshipId?: number;
-  companyName: string;
-  internshipRole: string;
-  companyLocation: string;
-  internshipMode: string;
-  internshipType: string;
-  stipendAmount?: number;
-  durationMonths?: number;
-  applyLink?: string;
-  companyDescription?: string;
-  skillMatchScore?: number;
-}
-
-export interface InternshipResponse {
-  success: boolean;
-  message?: string;
-  data: Internship[];
+  title: string;
+  company: string;
+  location: string;
+  platform: string;
+  link: string;
+  description: string;
 }
 
 @Injectable({
@@ -35,25 +23,20 @@ export interface InternshipResponse {
 })
 export class InternshipRecommendationService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://localhost:7152/api/InternshipRecommendation/recommend';
+  private apiUrl = 'https://localhost:7152/api/InternshipRecommendation/find';
 
-  recommendInternships(form: any): Observable<InternshipResponse> {
+  recommendInternships(form: any): Observable<Internship[]> {
     const payload: InternshipRequest = {
-      location: form.location,
-      internshipMode: form.internshipMode,
+      city: form.location, // Mapping the component's 'location' to 'city'
       qualification: form.qualification,
-      skills: form.skills
+      skills: form.skills // Assuming UI provides comma-separated string based on prompt
     };
 
-    return this.http.post<InternshipResponse>(this.apiUrl, payload).pipe(
-      map(response => {
-        return response;
-      }),
+    return this.http.post<Internship[]>(this.apiUrl, payload).pipe(
       catchError(error => {
         console.error('Internship API Error:', error);
         return throwError(() => new Error(error.message || 'Failed to fetch internship recommendations'));
       })
     );
   }
-  // Interface updated for API consistency
 }
