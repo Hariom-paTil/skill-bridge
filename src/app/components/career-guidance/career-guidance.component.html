@@ -1,6 +1,7 @@
 <div class="roadmap-wrapper">
 	<div class="roadmap-card">
 		<header class="roadmap-header">
+			<p class="eyebrow">AI career planner</p>
 			<h1>Full Career Roadmap</h1>
 			<p>Describe what you enjoy and we will surface career tracks plus concrete next steps.</p>
 		</header>
@@ -71,7 +72,7 @@
 <!-- Results Modal -->
 <div class="results-modal" *ngIf="showResultsModal">
 	<div class="modal-backdrop" (click)="closeModal()"></div>
-	<div class="modal-content">
+	<div class="modal-content" #modalContent>
 		<button class="modal-close" (click)="closeModal()">
 			<span>&times;</span>
 		</button>
@@ -79,11 +80,19 @@
 		<header class="modal-header">
 			<h3>Your Full Career Roadmap</h3>
 			<p class="modal-sub">AI-powered insights based on your unique profile</p>
+			<div class="modal-actions">
+				<button type="button" class="skip-btn" *ngIf="isTyping" (click)="skipTyping()">Skip animation</button>
+			</div>
 		</header>
 
 		<section class="modal-body">
-			<div class="guidance-display" (click)="skipTyping()">
+			<div class="guidance-display" #guidanceDisplay (click)="skipTyping()">
 				<div class="guidance-content" [innerHTML]="displayedContent"></div>
+				<div class="typing-indicator" *ngIf="isTyping">
+					<span class="dot"></span>
+					<span class="dot"></span>
+					<span class="dot"></span>
+				</div>
 			</div>
 		</section>
 	</div>

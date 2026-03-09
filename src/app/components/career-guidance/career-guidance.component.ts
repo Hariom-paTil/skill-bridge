@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, ViewChild, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { marked } from 'marked';
@@ -36,6 +36,9 @@ export class CareerGuidanceComponent implements OnInit, OnDestroy {
   showResultsModal = false;
   isTyping = false;
   private typingInterval: any;
+
+  @ViewChild('guidanceDisplay') guidanceDisplay?: ElementRef<HTMLDivElement>;
+  @ViewChild('modalContent') modalContent?: ElementRef<HTMLDivElement>;
 
   ngOnInit(): void {
     const details = this.authState.userDetails();
@@ -82,6 +85,8 @@ export class CareerGuidanceComponent implements OnInit, OnDestroy {
     let index = 0;
     const speed = 10;
 
+    this.displayedContent = '';
+
     if (this.typingInterval) clearInterval(this.typingInterval);
 
     this.typingInterval = setInterval(async () => {
@@ -94,8 +99,10 @@ export class CareerGuidanceComponent implements OnInit, OnDestroy {
         try {
           const parsed = marked.parse(currentMarkdown);
           this.displayedContent = parsed instanceof Promise ? await parsed : parsed;
+          this.scrollOutputWithTyping();
         } catch (e) {
           this.displayedContent = currentMarkdown;
+          this.scrollOutputWithTyping();
         }
       } else {
         this.finishTyping();
@@ -108,6 +115,7 @@ export class CareerGuidanceComponent implements OnInit, OnDestroy {
       this.finishTyping();
       const parsed = marked.parse(this.guidanceContent);
       this.displayedContent = parsed instanceof Promise ? await parsed : parsed;
+      this.scrollOutputToBottom();
     }
   }
 
@@ -116,6 +124,7 @@ export class CareerGuidanceComponent implements OnInit, OnDestroy {
     if (this.typingInterval) {
       clearInterval(this.typingInterval);
     }
+    this.scrollOutputToBottom();
   }
 
   closeModal(): void {
@@ -123,6 +132,34 @@ export class CareerGuidanceComponent implements OnInit, OnDestroy {
     this.finishTyping();
     this.displayedContent = '';
     this.guidanceContent = '';
+  }
+
+  private scrollOutputWithTyping(): void {
+    requestAnimationFrame(() => {
+      const container = this.guidanceDisplay?.nativeElement;
+      if (container) {
+        container.scrollTop = container.scrollHeight;
+      }
+
+      const modal = this.modalContent?.nativeElement;
+      if (modal) {
+        modal.scrollTop = modal.scrollHeight;
+      }
+    });
+  }
+
+  private scrollOutputToBottom(): void {
+    setTimeout(() => {
+      const container = this.guidanceDisplay?.nativeElement;
+      if (container) {
+        container.scrollTop = container.scrollHeight;
+      }
+
+      const modal = this.modalContent?.nativeElement;
+      if (modal) {
+        modal.scrollTop = modal.scrollHeight;
+      }
+    }, 0);
   }
 
   ngOnDestroy(): void {
