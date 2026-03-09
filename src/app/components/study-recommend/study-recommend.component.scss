@@ -1,66 +1,90 @@
-@use 'sass:color';
+// Internship Finder inspired style language for Skill Gap Analyzer
+$bg-color: #f8fafc;
+$card-bg: #ffffff;
+$text-main: #0f172a;
+$text-muted: #64748b;
+$primary-color: #3b82f6;
+$primary-hover: #2563eb;
+$accent-color: #8b5cf6;
+$gradient-btn: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+$gradient-hover: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+$border-color: #e2e8f0;
+$shadow-soft: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+$shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+$transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+$border-radius: 16px;
 
 :host {
 	display: block;
-	padding: 64px 16px;
-	background: #0b1220;
-	color: #e9edf5;
+	padding: 40px 16px;
+	background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.08), transparent 42%),
+		radial-gradient(circle at bottom left, rgba(139, 92, 246, 0.08), transparent 42%);
 }
 
 .tool-panel {
 	max-width: 1100px;
 	margin: 0 auto;
-	background: linear-gradient(145deg, rgba(18, 26, 48, 0.92), rgba(14, 20, 36, 0.96));
-	border: 1px solid rgba(78, 99, 150, 0.35);
-	border-radius: 18px;
+	background: $card-bg;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	border-radius: $border-radius;
 	padding: 32px;
-	box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+	box-shadow: $shadow-soft;
+	color: $text-main;
 }
 
 .tool-header {
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start;
-	gap: 16px;
-	margin-bottom: 18px;
+	gap: 20px;
+	margin-bottom: 24px;
 
 	h2 {
-		margin: 4px 0;
-		font-size: 28px;
+		margin: 4px 0 10px;
+		font-size: 2rem;
+		font-weight: 700;
+		background: $gradient-btn;
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
 	}
 
 	.lede {
 		margin: 0;
-		color: #b7c4de;
+		color: $text-muted;
 		line-height: 1.6;
 	}
-}
-
-.tool-visual {
-	width: 160px;
-	height: 160px;
-	object-fit: cover;
-	border-radius: 50%;
-	mix-blend-mode: multiply;
-	filter: contrast(1.1) brightness(1.05) drop-shadow(0 10px 24px rgba(0, 0, 0, 0.35));
-	background: linear-gradient(135deg, #e3f2fd 0%, #f3f7ff 100%);
-	padding: 15px;
 }
 
 .eyebrow {
 	text-transform: uppercase;
 	letter-spacing: 0.06em;
 	font-size: 12px;
-	color: #7aa2ff;
+	font-weight: 600;
+	color: $primary-color;
 	margin: 0;
 }
 
+.tool-visual {
+	width: 140px;
+	height: 140px;
+	object-fit: cover;
+	border-radius: 50%;
+	background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 100%);
+	padding: 12px;
+	box-shadow: 0 10px 24px rgba(59, 130, 246, 0.18);
+}
+
 .form-container {
-	background: rgba(255, 255, 255, 0.01);
-	border: 1px solid rgba(122, 162, 255, 0.15);
-	border-radius: 16px;
+	background: $card-bg;
+	border: 1px solid $border-color;
+	border-radius: $border-radius;
 	padding: 24px;
 	margin-bottom: 20px;
+
+	&.hidden {
+		display: none;
+	}
 }
 
 .input-grid {
@@ -92,25 +116,21 @@
 		gap: 4px;
 	}
 
-	.label-text {
-		font-weight: 600;
-		color: #d9e3f5;
+	.label-text,
+	.field-label {
+		font-weight: 500;
+		color: $text-main;
+		font-size: 0.95rem;
 	}
 
 	.required-mark {
-		color: #ff6b6b;
+		color: #ef4444;
 		font-weight: 700;
-	}
-
-	.field-label {
-		font-weight: 600;
-		color: #d9e3f5;
-		font-size: 14px;
 	}
 
 	.field-hint {
 		font-size: 12px;
-		color: #8a9cb8;
+		color: $text-muted;
 		margin-top: -4px;
 	}
 
@@ -120,59 +140,67 @@
 		width: 100%;
 		padding: 14px 16px;
 		border-radius: 12px;
-		border: 1px solid rgba(122, 162, 255, 0.2);
-		background: rgba(255, 255, 255, 0.05);
-		color: #e9edf5;
-		font-size: 15px;
-		transition: all 0.2s ease;
+		border: 1.5px solid $border-color;
+		background: $bg-color;
+		color: $text-main;
+		font-size: 1rem;
+		transition: $transition;
 		font-family: inherit;
 
 		&::placeholder {
-			color: rgba(233, 237, 245, 0.3);
+			color: #94a3b8;
 		}
 
 		&:hover {
-			border-color: rgba(122, 162, 255, 0.4);
+			border-color: #cbd5e1;
 		}
 
 		&:focus {
 			outline: none;
-			border-color: #7aa2ff;
-			box-shadow: 0 0 0 4px rgba(122, 162, 255, 0.1);
-			background: rgba(12, 18, 34, 0.8);
+			background: $card-bg;
+			border-color: $primary-color;
+			box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
 		}
 
 		&:disabled {
-			opacity: 0.7;
-			background: rgba(12, 18, 34, 0.3);
+			opacity: 0.75;
+			background: #f1f5f9;
 			cursor: not-allowed;
 		}
+	}
+
+	select {
+		appearance: none;
+		background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+		background-repeat: no-repeat;
+		background-position: right 1rem center;
+		background-size: 16px 12px;
 
 		option {
-			background: #0b1220;
-			color: #e9edf5;
+			background: $card-bg;
+			color: $text-main;
 		}
 	}
 
 	textarea {
 		resize: vertical;
-		min-height: 80px;
+		min-height: 90px;
 		line-height: 1.5;
 	}
 }
 
 button.primary {
 	width: 100%;
-	padding: 14px 24px;
+	padding: 16px;
 	border-radius: 12px;
-	background: linear-gradient(120deg, #4f8bff, #7aa2ff);
+	background: $gradient-btn;
 	border: none;
-	color: #0b1220;
-	font-weight: 700;
-	font-size: 15px;
+	color: #ffffff;
+	font-size: 1.05rem;
+	font-weight: 600;
 	cursor: pointer;
-	box-shadow: 0 16px 40px rgba(122, 162, 255, 0.3);
-	transition: all 0.2s ease;
+	box-shadow: 0 10px 20px rgba(139, 92, 246, 0.25);
+	transition: $transition;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -187,9 +215,9 @@ button.primary {
 	}
 
 	&:hover:not(:disabled) {
-		transform: translateY(-2px);
-		box-shadow: 0 20px 50px rgba(122, 162, 255, 0.4);
-		background: linear-gradient(120deg, #5a95ff, #85acff);
+		transform: scale(1.02) translateY(-2px);
+		box-shadow: 0 12px 24px rgba(139, 92, 246, 0.3);
+		background: $gradient-hover;
 	}
 
 	&:active:not(:disabled) {
@@ -197,7 +225,7 @@ button.primary {
 	}
 
 	&:disabled {
-		opacity: 0.7;
+		opacity: 0.65;
 		cursor: not-allowed;
 	}
 }
@@ -215,30 +243,23 @@ button.primary {
 .status {
 	margin: 16px 0;
 	padding: 12px 16px;
-	background: rgba(122, 162, 255, 0.05);
-	border-left: 3px solid #7aa2ff;
+	background: #eff6ff;
+	border-left: 3px solid $primary-color;
 	border-radius: 8px;
-	color: #c8d6f2;
+	color: #1e3a8a;
 	font-size: 14px;
 	line-height: 1.5;
-	transition: all 0.3s ease;
 
 	&.error {
-		border-left-color: #ff6b6b;
-		background: rgba(255, 107, 107, 0.05);
-		color: #ff9999;
+		border-left-color: #ef4444;
+		background: #fef2f2;
+		color: #b91c1c;
 	}
 
 	&.success {
-		border-left-color: #51cf66;
-		background: rgba(81, 207, 102, 0.05);
-		color: #8dffa3;
-	}
-}
-
-.form-container {
-	&.hidden {
-		display: none;
+		border-left-color: #22c55e;
+		background: #f0fdf4;
+		color: #166534;
 	}
 }
 
@@ -255,26 +276,26 @@ button.primary {
 	h3 {
 		font-size: 24px;
 		margin: 0 0 8px 0;
-		color: #e9edf5;
+		color: $text-main;
 	}
 
 	.results-info {
 		margin: 0;
-		color: #9fb3d9;
+		color: $text-muted;
 		font-size: 14px;
 	}
 }
 
 .result-card {
-	background: rgba(255, 255, 255, 0.03);
-	border: 1px solid rgba(122, 162, 255, 0.3);
+	background: $card-bg;
+	border: 1px solid $border-color;
 	border-radius: 16px;
 	padding: 20px;
-	transition: all 0.3s ease;
+	transition: $transition;
 
 	&:hover {
-		border-color: rgba(122, 162, 255, 0.5);
-		box-shadow: 0 8px 24px rgba(122, 162, 255, 0.15);
+		border-color: rgba(59, 130, 246, 0.4);
+		box-shadow: $shadow-soft;
 		transform: translateY(-2px);
 	}
 }
@@ -289,18 +310,18 @@ button.primary {
 	h3 {
 		margin: 4px 0 0 0;
 		font-size: 20px;
-		color: #e9edf5;
+		color: $text-main;
 	}
 
 	.duration-badge {
 		display: flex;
 		align-items: center;
 		gap: 6px;
-		background: rgba(122, 162, 255, 0.15);
+		background: rgba(59, 130, 246, 0.1);
 		padding: 8px 14px;
 		border-radius: 20px;
 		white-space: nowrap;
-		color: #dbe5ff;
+		color: #1d4ed8;
 		font-size: 13px;
 		font-weight: 600;
 
@@ -318,18 +339,18 @@ button.primary {
 }
 
 .pill {
-	background: rgba(122, 162, 255, 0.12);
-	color: #dbe5ff;
+	background: rgba(59, 130, 246, 0.08);
+	color: #1e40af;
 	padding: 6px 12px;
 	border-radius: 999px;
-	border: 1px solid rgba(122, 162, 255, 0.3);
+	border: 1px solid rgba(59, 130, 246, 0.2);
 	font-size: 12px;
 	font-weight: 500;
-	transition: all 0.2s ease;
+	transition: $transition;
 
 	&:hover {
-		background: rgba(122, 162, 255, 0.18);
-		border-color: rgba(122, 162, 255, 0.5);
+		background: rgba(59, 130, 246, 0.14);
+		border-color: rgba(59, 130, 246, 0.35);
 	}
 }
 
@@ -339,8 +360,8 @@ button.primary {
 	gap: 16px;
 
 	.column-card {
-		background: rgba(255, 255, 255, 0.02);
-		border: 1px solid rgba(122, 162, 255, 0.2);
+		background: #f8fafc;
+		border: 1px solid $border-color;
 		border-radius: 12px;
 		padding: 16px;
 	}
@@ -348,7 +369,7 @@ button.primary {
 	ul {
 		padding-left: 20px;
 		margin: 8px 0 0 0;
-		color: #c8d6f2;
+		color: $text-main;
 		line-height: 1.8;
 
 		li {
@@ -360,7 +381,7 @@ button.primary {
 .subhead {
 	margin: 0 0 8px;
 	font-weight: 700;
-	color: #e9edf5;
+	color: $text-main;
 	font-size: 14px;
 	display: flex;
 	align-items: center;
@@ -370,48 +391,6 @@ button.primary {
 		font-size: 16px;
 	}
 }
-
-@media (max-width: 768px) {
-	.tool-panel {
-		padding: 20px;
-	}
-
-	.form-container {
-		padding: 16px;
-	}
-
-	.input-grid,
-	.input-grid-three {
-		grid-template-columns: 1fr;
-	}
-
-	.result-header {
-		flex-direction: column;
-		gap: 12px;
-
-		.duration-badge {
-			align-self: flex-start;
-		}
-	}
-
-	.columns {
-		grid-template-columns: 1fr;
-	}
-
-	.tool-visual {
-		width: 120px;
-		height: 120px;
-		padding: 12px;
-	}
-
-	.tool-header {
-		flex-direction: column;
-		align-items: center;
-		text-align: center;
-	}
-}
-
-// ==================== API RESPONSE STYLES ====================
 
 .api-response-container {
 	animation: slideInUp 0.5s ease-out;
@@ -442,7 +421,7 @@ button.primary {
 		margin: 0;
 		font-size: 26px;
 		font-weight: 700;
-		background: linear-gradient(120deg, #7aa2ff, #dbe5ff);
+		background: $gradient-btn;
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 		background-clip: text;
@@ -450,34 +429,34 @@ button.primary {
 
 	.reset-btn {
 		padding: 8px 16px;
-		background: rgba(122, 162, 255, 0.15);
-		border: 1px solid rgba(122, 162, 255, 0.3);
-		color: #dbe5ff;
+		background: rgba(59, 130, 246, 0.08);
+		border: 1px solid rgba(59, 130, 246, 0.25);
+		color: #1d4ed8;
 		border-radius: 8px;
 		cursor: pointer;
 		font-size: 12px;
 		font-weight: 600;
-		transition: all 0.2s ease;
+		transition: $transition;
 
 		&:hover {
-			background: rgba(122, 162, 255, 0.25);
-			border-color: rgba(122, 162, 255, 0.5);
-			transform: scale(1.05);
+			background: rgba(59, 130, 246, 0.14);
+			border-color: rgba(59, 130, 246, 0.35);
+			transform: scale(1.03);
 		}
 	}
 }
 
 .recommendation-card {
-	background: linear-gradient(135deg, rgba(79, 139, 255, 0.08), rgba(122, 162, 255, 0.05));
-	border: 1px solid rgba(122, 162, 255, 0.25);
+	background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(139, 92, 246, 0.05));
+	border: 1px solid rgba(59, 130, 246, 0.2);
 	border-radius: 16px;
 	padding: 28px;
-	box-shadow: 0 8px 32px rgba(122, 162, 255, 0.15);
+	box-shadow: $shadow-soft;
 
 	.target-role {
 		margin-bottom: 28px;
 		padding-bottom: 20px;
-		border-bottom: 2px solid rgba(122, 162, 255, 0.2);
+		border-bottom: 1px solid $border-color;
 
 		.role-label {
 			display: inline-block;
@@ -485,7 +464,7 @@ button.primary {
 			font-weight: 700;
 			text-transform: uppercase;
 			letter-spacing: 0.06em;
-			color: #7aa2ff;
+			color: $primary-color;
 			margin-bottom: 8px;
 		}
 
@@ -493,11 +472,7 @@ button.primary {
 			margin: 0;
 			font-size: 28px;
 			font-weight: 700;
-			color: #dbe5ff;
-			background: linear-gradient(120deg, #85acff, #ffffff);
-			-webkit-background-clip: text;
-			-webkit-text-fill-color: transparent;
-			background-clip: text;
+			color: $text-main;
 		}
 	}
 }
@@ -508,7 +483,7 @@ button.primary {
 	.path-header {
 		font-size: 18px;
 		font-weight: 700;
-		color: #dbe5ff;
+		color: $text-main;
 		margin: 0 0 20px 0;
 		display: flex;
 		align-items: center;
@@ -525,10 +500,10 @@ button.primary {
 	display: flex;
 	gap: 16px;
 	padding: 16px;
-	background: rgba(255, 255, 255, 0.02);
-	border: 1px solid rgba(122, 162, 255, 0.2);
+	background: $card-bg;
+	border: 1px solid $border-color;
 	border-radius: 12px;
-	transition: all 0.3s ease;
+	transition: $transition;
 	opacity: 0;
 
 	&.animate-in {
@@ -536,8 +511,8 @@ button.primary {
 	}
 
 	&:hover {
-		background: rgba(122, 162, 255, 0.08);
-		border-color: rgba(122, 162, 255, 0.4);
+		background: #f8fafc;
+		border-color: rgba(59, 130, 246, 0.35);
 		transform: translateX(8px);
 	}
 
@@ -548,9 +523,9 @@ button.primary {
 		min-width: 44px;
 		width: 44px;
 		height: 44px;
-		background: linear-gradient(120deg, #4f8bff, #7aa2ff);
+		background: $gradient-btn;
 		border-radius: 50%;
-		color: #0b1220;
+		color: #ffffff;
 		font-weight: 700;
 		font-size: 16px;
 		flex-shrink: 0;
@@ -564,18 +539,18 @@ button.primary {
 		margin: 0 0 8px 0;
 		font-size: 16px;
 		font-weight: 700;
-		color: #e9edf5;
+		color: $text-main;
 	}
 
 	.step-why {
 		margin: 0;
 		font-size: 13px;
-		color: #b7c4de;
+		color: $text-muted;
 		line-height: 1.6;
 
 		.why-label {
 			font-weight: 700;
-			color: #dbe5ff;
+			color: $text-main;
 		}
 	}
 }
@@ -592,16 +567,15 @@ button.primary {
 	}
 }
 
-// Typing Animation Styles
 .typing-animation {
 	margin-top: 24px;
 	padding: 20px;
-	background: rgba(0, 0, 0, 0.3);
-	border: 1px solid rgba(122, 162, 255, 0.2);
+	background: #f8fafc;
+	border: 1px solid $border-color;
 	border-radius: 12px;
-	border-left: 3px solid #7aa2ff;
+	border-left: 3px solid $primary-color;
 	font-family: 'Courier New', monospace;
-	color: #85acff;
+	color: #1e40af;
 	line-height: 1.6;
 	min-height: 100px;
 }
@@ -611,20 +585,19 @@ button.primary {
 	white-space: pre-wrap;
 	word-wrap: break-word;
 	font-size: 13px;
-	color: #c8d6f2;
+	color: $text-main;
 }
 
 .cursor {
 	display: inline-block;
 	width: 2px;
 	height: 1em;
-	background: #7aa2ff;
+	background: $primary-color;
 	margin-left: 2px;
 	animation: blink 0.7s infinite;
 }
 
 @keyframes blink {
-
 	0%,
 	50% {
 		opacity: 1;
@@ -636,14 +609,13 @@ button.primary {
 	}
 }
 
-// Error Container
 .error-container {
 	margin-top: 20px;
 	animation: slideInUp 0.3s ease-out;
 
 	.error-content {
-		background: rgba(255, 107, 107, 0.08);
-		border: 1px solid rgba(255, 107, 107, 0.3);
+		background: #fef2f2;
+		border: 1px solid #fca5a5;
 		border-radius: 12px;
 		padding: 24px;
 		text-align: center;
@@ -655,33 +627,59 @@ button.primary {
 
 		.error-message {
 			margin: 0 0 16px 0;
-			color: #ff9999;
+			color: #b91c1c;
 			font-size: 15px;
 			line-height: 1.6;
 		}
 
 		.retry-btn {
 			padding: 10px 24px;
-			background: rgba(255, 107, 107, 0.2);
-			border: 1px solid rgba(255, 107, 107, 0.4);
-			color: #ff9999;
+			background: #fee2e2;
+			border: 1px solid #fca5a5;
+			color: #b91c1c;
 			border-radius: 8px;
 			cursor: pointer;
 			font-size: 13px;
 			font-weight: 600;
-			transition: all 0.2s ease;
+			transition: $transition;
 
 			&:hover {
-				background: rgba(255, 107, 107, 0.3);
-				border-color: rgba(255, 107, 107, 0.6);
-				transform: scale(1.05);
+				background: #fecaca;
+				transform: scale(1.03);
 			}
 		}
 	}
 }
 
-// Responsive adjustments for API response
 @media (max-width: 768px) {
+	.tool-panel {
+		padding: 20px;
+	}
+
+	.form-container {
+		padding: 16px;
+	}
+
+	.tool-visual {
+		width: 110px;
+		height: 110px;
+	}
+
+	.tool-header {
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+
+		h2 {
+			font-size: 1.75rem;
+		}
+	}
+
+	.input-grid,
+	.input-grid-three {
+		grid-template-columns: 1fr;
+	}
+
 	.api-response-container {
 		margin-top: 16px;
 	}
@@ -709,18 +707,26 @@ button.primary {
 		}
 	}
 
+	.result-header,
 	.step-card {
 		flex-direction: column;
+		gap: 12px;
 
+		&:hover {
+			transform: none;
+		}
+	}
+
+	.step-card {
 		.step-number {
 			width: 36px;
 			height: 36px;
 			font-size: 14px;
 		}
+	}
 
-		&:hover {
-			transform: translateX(0);
-		}
+	.columns {
+		grid-template-columns: 1fr;
 	}
 
 	.typing-animation {
