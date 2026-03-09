@@ -79,28 +79,50 @@
 	<p class="status" [class.error]="error" [class.success]="!error && showApiResult">{{ note }}</p>
 
 	<!-- API Response Display with Typing Animation -->
-	<div class="api-response-container" *ngIf="showApiResult && apiResponse && !error">
+	<div class="api-response-container" *ngIf="showApiResult && apiResponse && !error" id="skill-gap-results-top">
 		<div class="response-header">
-			<h3 class="response-title">🚀 Your Personalized Learning Path</h3>
-			<button class="reset-btn" (click)="showApiResult = false; displayedContent = ''; targetedSkill = ''"
-				title="New Recommendation">
-				↻ New Recommendation
-			</button>
+			<div>
+				<h3 class="response-title">Your Personalized Learning Path</h3>
+				<p class="response-subtitle">Clear step-by-step roadmap based on your goals and current level.</p>
+			</div>
+			<div class="response-actions">
+				<button class="ghost-btn" (click)="scrollToTopOfResult()" title="Go to top">
+					Top
+				</button>
+				<button class="reset-btn" (click)="startNewRecommendation()" title="New Recommendation">
+					New Recommendation
+				</button>
+			</div>
 		</div>
 
-		<!-- Main Content with Typing Animation -->
+		<!-- Main Result Content -->
 		<div class="recommendation-card">
 			<div class="target-role">
 				<span class="role-label">Target Role:</span>
 				<h2 class="role-name">{{ apiResponse.data.targetRole }}</h2>
 			</div>
 
+			<div class="result-insights">
+				<div class="insight-card">
+					<span class="insight-label">Total Steps</span>
+					<strong class="insight-value">{{ learningPathSteps.length }}</strong>
+				</div>
+				<div class="insight-card">
+					<span class="insight-label">Estimated Timeline</span>
+					<strong class="insight-value">{{ estimatedTimeline }}</strong>
+				</div>
+				<div class="insight-card">
+					<span class="insight-label">Preferred Format</span>
+					<strong class="insight-value">{{ formatLabel }}</strong>
+				</div>
+			</div>
+
 			<!-- Learning Path Steps -->
 			<div class="learning-path-section">
 				<h3 class="path-header">📚 Learning Path</h3>
 
-				<div class="steps-container">
-					<div class="step-card" *ngFor="let step of apiResponse.data.learningPath; let i = index"
+				<div class="steps-container" role="list">
+					<div class="step-card" *ngFor="let step of learningPathSteps; let i = index; trackBy: trackByStep"
 						[class.animate-in]="!isLoading" [style.animation-delay]="(i * 0.1) + 's'">
 						<div class="step-number">{{ step.step }}</div>
 						<div class="step-content">
@@ -112,12 +134,6 @@
 						</div>
 					</div>
 				</div>
-			</div>
-
-			<!-- Typing Animation Content -->
-			<div class="typing-animation" *ngIf="isTypingAnimation && displayedContent">
-				<pre
-					class="typing-content">{{ displayedContent }}<span class="cursor" *ngIf="displayedContent.length < 200"></span></pre>
 			</div>
 		</div>
 	</div>

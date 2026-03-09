@@ -39,14 +39,9 @@ export class StudyRecommendComponent implements OnDestroy {
   
   // API Response properties
   apiResponse: StudyRecommendationResponse | null = null;
-  displayedContent: string = '';
   isLoading = false;
   error: string | null = null;
   showApiResult = false;
-  
-  // Typing animation
-  isTypingAnimation = true;
-  typingSpeed = 15; // milliseconds per character
 
   paths: StudyPath[] = [
     {
@@ -124,7 +119,6 @@ export class StudyRecommendComponent implements OnDestroy {
     this.isLoading = true;
     this.error = null;
     this.showApiResult = false;
-    this.displayedContent = '';
 
     const payload = {
       targetedSkill: this.targetedSkill,
@@ -143,7 +137,7 @@ export class StudyRecommendComponent implements OnDestroy {
           this.isLoading = false;
           this.showApiResult = true;
           this.note = `✅ Found personalized learning path for "${response.data.targetRole}"`;
-          this.startTypingAnimation();
+          setTimeout(() => this.scrollToTopOfResult(), 0);
         },
         error: (error) => {
           this.isLoading = false;
@@ -155,46 +149,47 @@ export class StudyRecommendComponent implements OnDestroy {
       });
   }
 
-  /**
-   * Start typing animation for the response content
-   */
-  private startTypingAnimation(): void {
-    if (!this.apiResponse) return;
-
-    const content = this.generateFormattedContent();
-    let index = 0;
-
-    const typeNextCharacter = () => {
-      if (index < content.length) {
-        this.displayedContent += content[index];
-        index++;
-        setTimeout(typeNextCharacter, this.typingSpeed);
-      }
-    };
-
-    typeNextCharacter();
+  get learningPathSteps(): LearningPathStep[] {
+    return this.apiResponse?.data?.learningPath ?? [];
   }
 
-  /**
-   * Generate formatted content from API response
-   */
-  private generateFormattedContent(): string {
-    if (!this.apiResponse?.data) return '';
+  get estimatedTimeline(): string {
+    const byCommitment: Record<string, string> = {
+      '1-5': '12-16 weeks',
+      '5-10': '8-12 weeks',
+      '10-20': '6-8 weeks',
+      '20+': '4-6 weeks'
+    };
 
-    const { targetRole, learningPath } = this.apiResponse.data;
-    let content = '';
+    return byCommitment[this.timeCommitment] ?? '8-12 weeks';
+  }
 
-    // Title
-    content += `🎯 Recommended Role: ${targetRole}\n\n`;
-    content += `📚 Your Learning Path:\n\n`;
+  get formatLabel(): string {
+    const labels: Record<string, string> = {
+      video: 'Video tutorials',
+      reading: 'Reading and docs',
+      interactive: 'Interactive courses',
+      mixed: 'Mixed format'
+    };
 
-    // Learning steps
-    learningPath.forEach((step) => {
-      content += `Step ${step.step}: ${step.topic}\n`;
-      content += `Why: ${step.why}\n\n`;
-    });
+    return labels[this.preferredFormat] ?? 'Mixed format';
+  }
 
-    return content;
+  trackByStep(_: number, step: LearningPathStep): number {
+    return step.step;
+  }
+
+  startNewRecommendation(): void {
+    this.showApiResult = false;
+    this.error = null;
+    this.note = 'Update your details and generate a new personalized learning path.';
+  }
+
+  scrollToTopOfResult(): void {
+    const anchor = document.getElementById('skill-gap-results-top');
+    if (anchor) {
+      anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 
   ngOnDestroy(): void {

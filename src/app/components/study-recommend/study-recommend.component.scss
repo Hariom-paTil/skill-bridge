@@ -427,6 +427,20 @@ button.primary {
 		background-clip: text;
 	}
 
+	.response-subtitle {
+		margin: 8px 0 0;
+		font-size: 14px;
+		color: $text-muted;
+	}
+
+	.response-actions {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.ghost-btn,
+
 	.reset-btn {
 		padding: 8px 16px;
 		background: rgba(59, 130, 246, 0.08);
@@ -443,6 +457,11 @@ button.primary {
 			border-color: rgba(59, 130, 246, 0.35);
 			transform: scale(1.03);
 		}
+	}
+
+	.ghost-btn {
+		background: transparent;
+		color: $text-muted;
 	}
 }
 
@@ -477,6 +496,33 @@ button.primary {
 	}
 }
 
+.result-insights {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 12px;
+	margin-bottom: 22px;
+}
+
+.insight-card {
+	padding: 12px;
+	border: 1px solid $border-color;
+	border-radius: 12px;
+	background: rgba(255, 255, 255, 0.8);
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.insight-label {
+	font-size: 12px;
+	color: $text-muted;
+}
+
+.insight-value {
+	font-size: 15px;
+	color: $text-main;
+}
+
 .learning-path-section {
 	margin-bottom: 32px;
 
@@ -494,6 +540,19 @@ button.primary {
 .steps-container {
 	display: grid;
 	gap: 16px;
+	max-height: 62vh;
+	overflow-y: auto;
+	padding-right: 8px;
+	scroll-behavior: smooth;
+
+	&::-webkit-scrollbar {
+		width: 8px;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background: #cbd5e1;
+		border-radius: 999px;
+	}
 }
 
 .step-card {
@@ -547,6 +606,9 @@ button.primary {
 		font-size: 13px;
 		color: $text-muted;
 		line-height: 1.6;
+		background: #f8fafc;
+		padding: 10px;
+		border-radius: 8px;
 
 		.why-label {
 			font-weight: 700;
@@ -567,47 +629,6 @@ button.primary {
 	}
 }
 
-.typing-animation {
-	margin-top: 24px;
-	padding: 20px;
-	background: #f8fafc;
-	border: 1px solid $border-color;
-	border-radius: 12px;
-	border-left: 3px solid $primary-color;
-	font-family: 'Courier New', monospace;
-	color: #1e40af;
-	line-height: 1.6;
-	min-height: 100px;
-}
-
-.typing-content {
-	margin: 0;
-	white-space: pre-wrap;
-	word-wrap: break-word;
-	font-size: 13px;
-	color: $text-main;
-}
-
-.cursor {
-	display: inline-block;
-	width: 2px;
-	height: 1em;
-	background: $primary-color;
-	margin-left: 2px;
-	animation: blink 0.7s infinite;
-}
-
-@keyframes blink {
-	0%,
-	50% {
-		opacity: 1;
-	}
-
-	51%,
-	100% {
-		opacity: 0;
-	}
-}
 
 .error-container {
 	margin-top: 20px;
@@ -692,9 +713,18 @@ button.primary {
 			font-size: 20px;
 		}
 
+		.response-actions {
+			width: 100%;
+		}
+
+		.ghost-btn,
 		.reset-btn {
 			width: 100%;
 		}
+	}
+
+	.result-insights {
+		grid-template-columns: 1fr;
 	}
 
 	.recommendation-card {
@@ -729,12 +759,4 @@ button.primary {
 		grid-template-columns: 1fr;
 	}
 
-	.typing-animation {
-		margin-top: 16px;
-		padding: 14px;
-	}
-
-	.typing-content {
-		font-size: 12px;
-	}
 }
