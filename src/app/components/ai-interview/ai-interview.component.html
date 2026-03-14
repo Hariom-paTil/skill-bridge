@@ -1,0 +1,183 @@
+<div class="ai-interview-container">
+  <div class="header-section text-center">
+    <h2>Ai Interview</h2>
+    <p>Start your interview with role-based MCQs and check your score at the end.</p>
+  </div>
+
+  <div class="form-card form-card--entry" *ngIf="!loading && questions.length === 0 && !showResult">
+    <div class="intro-badge">Interactive Interview Practice</div>
+
+    <div class="form-group row-group">
+      <div class="input-half">
+        <label for="qualification">Qualification</label>
+        <input id="qualification" type="text" [(ngModel)]="formData.qualification" placeholder="e.g. BCA" />
+      </div>
+
+      <div class="input-half">
+        <label for="role">Role</label>
+        <input id="role" type="text" [(ngModel)]="formData.role" placeholder="e.g. Backend Developer" />
+      </div>
+    </div>
+
+    <div class="form-group row-group">
+      <div class="input-half">
+        <label for="skills">Skills</label>
+        <input id="skills" type="text" [(ngModel)]="formData.skills" placeholder="e.g. C#, ASP.NET" />
+      </div>
+      <div class="input-half">
+        <label for="projects">Projects</label>
+        <input id="projects" type="text" [(ngModel)]="formData.projects" placeholder="e.g. Ecommerce Website" />
+      </div>
+    </div>
+
+    <div class="submit-section">
+      <button
+        type="button"
+        class="btn-submit"
+        [disabled]="!formData.qualification || !formData.skills || !formData.projects || !formData.role"
+        (click)="startInterview()"
+      >
+        <span class="icon">🎤</span> Start Interview
+      </button>
+    </div>
+
+    <div class="error-msg" *ngIf="error">{{ error }}</div>
+  </div>
+
+  <div class="loading-state" *ngIf="loading">
+    <div class="ai-loader">
+      <div class="spinner"></div>
+      <div class="pulse-ring"></div>
+    </div>
+    <h3>Preparing your interview questions...</h3>
+    <p>Fetching questions from API.</p>
+  </div>
+
+  <div class="results-section results-section--questions" *ngIf="!loading && questions.length > 0 && !showResult">
+    <div class="results-header">
+      <div>
+        <p class="section-kicker">Question Set</p>
+        <h3>Interview Questions</h3>
+      </div>
+      <button class="btn-back" (click)="resetSession()">← Reset</button>
+    </div>
+
+    <div class="progress-strip">
+      <div class="progress-pill">Page {{ currentPage }} / {{ totalPages }}</div>
+      <div class="progress-pill">Questions {{ (currentPage - 1) * pageSize + 1 }} - {{ ((currentPage - 1) * pageSize) + pagedQuestions.length }}</div>
+      <div class="progress-pill">Answered {{ answeredCount }} / {{ questions.length }}</div>
+      <div class="progress-pill progress-pill--timer">Time {{ formattedTime }}</div>
+    </div>
+
+    <div class="progress-meter" aria-label="Interview progress">
+      <div class="progress-meter__head">
+        <span>Round progress</span>
+        <strong>{{ progressPercentage }}%</strong>
+      </div>
+      <div class="progress-meter__track">
+        <div class="progress-meter__fill" [style.width.%]="progressPercentage"></div>
+      </div>
+    </div>
+
+    <div class="question-card" *ngFor="let item of pagedQuestions">
+      <div class="question-head">
+        <span class="question-number">Q{{ item.id }}</span>
+        <h4>{{ item.question }}</h4>
+      </div>
+
+      <div class="options-grid">
+        <label class="option-item" [class.option-item--selected]="answers[item.id] === option.key" *ngFor="let option of item.options">
+          <input type="radio" [name]="'q-' + item.id" [value]="option.key" [(ngModel)]="answers[item.id]" />
+          <span class="option-badge">{{ option.key }}</span>
+          <span class="option-text">{{ option.label }}</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="pagination-actions">
+      <button type="button" class="btn-back" [disabled]="currentPage === 1" (click)="previousPage()">Previous</button>
+      <button type="button" class="btn-submit next-btn" *ngIf="currentPage < totalPages" (click)="nextPage()">Next</button>
+      <button type="button" class="btn-submit next-btn" *ngIf="currentPage === totalPages" (click)="checkResult()">Check Result</button>
+    </div>
+  </div>
+
+  <div class="results-section results-section--result" *ngIf="showResult">
+    <div class="results-header">
+      <div>
+        <p class="section-kicker">Completed</p>
+        <h3>Interview Result</h3>
+      </div>
+      <button class="btn-back" (click)="resetSession()">← New Interview</button>
+    </div>
+
+    <div class="score-hero">
+      <div class="score-ring">
+        <span>{{ questions.length ? ((score / questions.length) * 100).toFixed(0) : '0' }}%</span>
+      </div>
+      <div class="score-copy">
+        <h4>Score Summary</h4>
+        <p>Review your performance and start a new interview round when ready.</p>
+      </div>
+    </div>
+
+    <div class="result-grid">
+      <div class="result-card">
+        <span class="result-label">Total Questions</span>
+        <strong>{{ questions.length }}</strong>
+      </div>
+      <div class="result-card">
+        <span class="result-label">Attempted</span>
+        <strong>{{ attempted }}</strong>
+      </div>
+      <div class="result-card result-card--success">
+        <span class="result-label">Correct</span>
+        <strong>{{ score }}</strong>
+      </div>
+      <div class="result-card result-card--danger">
+        <span class="result-label">Wrong</span>
+        <strong>{{ wrong }}</strong>
+      </div>
+      <div class="result-card result-card--info">
+        <span class="result-label">Time Taken</span>
+        <strong>{{ formattedTime }}</strong>
+      </div>
+    </div>
+
+    <div class="feedback-card">
+      <h4>Performance Insight</h4>
+      <p *ngIf="performancePercentage >= 70">Strong result. You have a solid base for this interview topic.</p>
+      <p *ngIf="performancePercentage < 70">You should revise the topic areas and try another round for better accuracy.</p>
+    </div>
+
+    <div class="review-section">
+      <div class="review-section__header">
+        <h4>Answer Review</h4>
+        <p>Green shows the correct answer. Red shows your incorrect choice.</p>
+      </div>
+
+      <div class="review-card" *ngFor="let item of questions">
+        <div class="review-card__top">
+          <span class="question-number">Q{{ item.id }}</span>
+          <div class="review-card__copy">
+            <h5>{{ item.question }}</h5>
+            <p class="review-meta" [class.review-meta--unanswered]="!answers[item.id]">
+              Your answer: {{ answers[item.id] || 'Not answered' }} | Correct answer: {{ item.correctAnswer }}
+            </p>
+          </div>
+        </div>
+
+        <div class="review-options">
+          <div
+            class="review-option"
+            [class.review-option--correct]="getOptionState(item, option.key) === 'correct'"
+            [class.review-option--incorrect]="getOptionState(item, option.key) === 'incorrect'"
+            *ngFor="let option of item.options"
+          >
+            <span class="option-badge">{{ option.key }}</span>
+            <span class="option-text">{{ option.label }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

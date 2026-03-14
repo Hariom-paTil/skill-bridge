@@ -6,6 +6,7 @@ import { FeaturesSectionComponent } from './components/features-section/features
 import { CareerGuidanceComponent } from './components/career-guidance/career-guidance.component';
 import { StudyRecommendComponent } from './components/study-recommend/study-recommend.component';
 import { InternshipFinderComponent } from './components/internship-finder/internship-finder.component';
+import { AiInterviewComponent } from './components/ai-interview/ai-interview.component';
 import { ProjectIdeasComponent } from './components/project-ideas/project-ideas.component';
 import { TopAppsComponent } from './components/top-apps/top-apps.component';
 import { AuthModalComponent } from './components/auth/auth-modal/auth-modal.component';
@@ -15,16 +16,16 @@ import { FooterComponent } from './components/footer/footer.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, HeroSectionComponent, FeaturesSectionComponent, CareerGuidanceComponent, StudyRecommendComponent, InternshipFinderComponent, ProjectIdeasComponent, TopAppsComponent, AuthModalComponent, CelebrationComponent, FooterComponent],
+  imports: [CommonModule, HeaderComponent, HeroSectionComponent, FeaturesSectionComponent, CareerGuidanceComponent, StudyRecommendComponent, InternshipFinderComponent, AiInterviewComponent, ProjectIdeasComponent, TopAppsComponent, AuthModalComponent, CelebrationComponent, FooterComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
   title = 'skill-bridge';
 
-  activeTool: 'career-guidance' | 'study-recommend' | 'internship-finder' | 'project-ideas' | null = null;
+  activeTool: 'career-guidance' | 'study-recommend' | 'internship-finder' | 'ai-interview' | 'project-ideas' | null = null;
 
-  openTool(tool: 'career-guidance' | 'study-recommend' | 'internship-finder' | 'project-ideas'): void {
+  openTool(tool: 'career-guidance' | 'study-recommend' | 'internship-finder' | 'ai-interview' | 'project-ideas'): void {
     this.activeTool = tool;
   }
 

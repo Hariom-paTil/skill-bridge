@@ -46,6 +46,11 @@ export class FooterComponent {
     this.scrollToElement('internship-finder-card', ['#internship-finder-card']);
   }
 
+  scrollToAiInterview(event: Event) {
+    event.preventDefault();
+    this.scrollToElement('ai-interview-card', ['#ai-interview-card']);
+  }
+
   // Helper method for scrolling and highlighting
   private scrollToElement(elementId: string, highlightSelectors: string[] = [], highlightClass: string = 'highlight-card') {
     if (isPlatformBrowser(this.platformId)) {

@@ -63,6 +63,19 @@ export class HeaderComponent implements OnInit {
       }, 3000);
     }
   }
+
+  scrollToAiInterview(event: Event) {
+    event.preventDefault();
+    const element = document.getElementById('ai-interview-card');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      element.classList.add('highlight-card');
+      setTimeout(() => {
+        element.classList.remove('highlight-card');
+      }, 3000);
+    }
+  }
+
   scrollToCareerGuide(event: Event) {
     event.preventDefault();
     const element = document.getElementById('career-guidance-card');
