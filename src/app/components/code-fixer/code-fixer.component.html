@@ -3,7 +3,7 @@
 		<div>
 			<p class="eyebrow">Debug helper</p>
 			<h2>Code Error Fixer</h2>
-			<p class="lede">Send your snippet to the CodeFixer API and see fixes with a ChatGPT-style reveal.</p>
+			<p class="lede">Share your snippet and get AI-powered fixes with a step-by-step reveal.</p>
 		</div>
 		<img [src]="imageSrc" alt="Code Error Fixer" class="tool-visual" />
 	</header>
@@ -41,8 +41,8 @@
 	</label>
 
 	<button type="button" class="primary" (click)="fixCode()" [disabled]="isLoading">
-		<span *ngIf="!isLoading">Fix with API</span>
-		<span *ngIf="isLoading" class="spinner">Fixing…</span>
+		<span *ngIf="!isLoading">Ask AI to Fix</span>
+		<span *ngIf="isLoading" class="spinner">AI is fixing...</span>
 	</button>
 
 	<p class="status" *ngIf="!errorMessage && !result">Paste your snippet and run the fixer.</p>

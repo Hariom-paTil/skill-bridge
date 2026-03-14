@@ -46,11 +46,6 @@ export class FooterComponent {
     this.scrollToElement('internship-finder-card', ['#internship-finder-card']);
   }
 
-  scrollToCodeFixer(event: Event) {
-    event.preventDefault();
-    this.scrollToElement('code-fixer-card', ['#code-fixer-card']);
-  }
-
   // Helper method for scrolling and highlighting
   private scrollToElement(elementId: string, highlightSelectors: string[] = [], highlightClass: string = 'highlight-card') {
     if (isPlatformBrowser(this.platformId)) {

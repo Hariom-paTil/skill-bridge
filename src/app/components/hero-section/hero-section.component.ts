@@ -9,9 +9,9 @@ import { NgOptimizedImage } from '@angular/common';
   styleUrl: './hero-section.component.scss'
 })
 export class HeroSectionComponent {
-  @Output() toolSelected = new EventEmitter<'career-guidance' | 'study-recommend' | 'internship-finder' | 'code-fixer' | 'project-ideas'>();
+  @Output() toolSelected = new EventEmitter<'career-guidance' | 'study-recommend' | 'internship-finder' | 'project-ideas'>();
 
-  onSelectTool(tool: 'career-guidance' | 'study-recommend' | 'internship-finder' | 'code-fixer' | 'project-ideas') {
+  onSelectTool(tool: 'career-guidance' | 'study-recommend' | 'internship-finder' | 'project-ideas') {
     this.toolSelected.emit(tool);
   }
 }
