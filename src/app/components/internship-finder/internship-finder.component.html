@@ -36,7 +36,18 @@
                         <option value="BSc IT">BSc IT</option>
                         <option value="BE / BTech">BE / BTech</option>
                         <option value="MTech">MTech</option>
+                        <option value="__manual__">Other (Type manually)</option>
                     </select>
+
+                    <input
+                        *ngIf="formData.qualification === '__manual__'"
+                        type="text"
+                        id="manualQualification"
+                        name="manualQualification"
+                        [(ngModel)]="manualQualification"
+                        placeholder="Type your qualification"
+                        required
+                    >
                 </div>
 
                 <div class="input-half">

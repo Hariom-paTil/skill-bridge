@@ -31,6 +31,8 @@ export class InternshipFinderComponent {
     skills: ''
   };
 
+  manualQualification = '';
+
   ngOnInit() {
     // Auto-fill username if logged in
     this.formData.username = this.authState.userName();
@@ -45,10 +47,14 @@ export class InternshipFinderComponent {
     this.internships = [];
     this.showResults = false;
 
+    const resolvedQualification = this.formData.qualification === '__manual__'
+      ? this.manualQualification.trim()
+      : this.formData.qualification;
+
     const payload = {
       location: this.formData.location,
       internshipMode: this.formData.internshipMode,
-      qualification: this.formData.qualification,
+      qualification: resolvedQualification,
       skills: this.formData.skills
     };
 
